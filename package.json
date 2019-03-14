@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com:rombrandon/react-native-ui-tool.git"
   },
   "keywords": [
     "react-native-ui-tool",
     "react-native-ui",
-    "react-native-tool"
+    "react-native-tool",
     "react-native",
   ],
   "author": {
