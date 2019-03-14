@@ -7,7 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
+    "async-validator": ">=1.10.1",
+    "react": ">=16.8.3",
     "react-native": ">=0.47.0",
+    "prop-types": ">=15.7.2",
+    "react-navigation": ">=3.3.2",
+    "react-native-gesture-handler": ">=1.1.0",
     "react-native-vector-icons": ">=6.0.2"
   },
   "repository": {
@@ -21,5 +26,5 @@
     "react-native"
   ],
   "author": "brandonnn",
-  "license": "ISC"
+  "license": "MIT"
 }
