@@ -20,9 +20,6 @@
     "react-native-tool",
     "react-native"
   ],
-  "author": {
-    "name": "Brandon",
-    "email": "luomuhanshao@gmail.com"
-  },
+  "author": "brandonnn",
   "license": "ISC"
 }
