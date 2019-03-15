@@ -1,21 +1,29 @@
 import React from 'react'
-import {BackHandler} from 'react-native'
+import {
+  DeviceInfo, SafeAreaView, StyleSheet, View, ViewPropTypes, BackHandler
+} from 'react-native'
 import {PropTypes} from 'prop-types'
 import SafeAreaViewPlus from './SafeAreaViewPlus'
 import NavigationBar from './NavigationBar'
 
-export default class TopBarPage extends React.Component {
+export default class TabPage extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     onBackEvent: PropTypes.func,
     rightButton: PropTypes.element,
-    children: PropTypes.element
+    children: PropTypes.element,
+    safePlus: PropTypes.bool
   }
 
   static defaultProps = {
     rightButton: null,
     children: null,
+    safePlus: false,
     onBackEvent: () => {}
+  }
+
+  constructor(props) {
+    super(props)
   }
 
   componentDidMount() {
@@ -30,9 +38,9 @@ export default class TopBarPage extends React.Component {
   onBackEvent = () => this.props.onBackEvent()
 
   render() {
-    const {title, rightButton, children} = this.props
+    const {title, rightButton, children, safePlus} = this.props
     return (
-      <SafeAreaViewPlus>
+      <SafeAreaViewPlus enablePlus={safePlus}>
         <NavigationBar
           backEvent={this.onBackEvent}
           title={title}

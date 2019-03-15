@@ -3,7 +3,7 @@ import {
   StyleSheet, View
 } from 'react-native'
 import {PropTypes} from 'prop-types'
-import {TopBarPage} from '../../index'
+import {TabPage} from '../../index'
 
 export default class Index extends React.Component {
   static propTypes = {
@@ -13,8 +13,8 @@ export default class Index extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TopBarPage
-          title="TopBarPage"
+        <TabPage
+          title="TabPage"
           onBackEvent={() => {
             this.props.navigation.goBack()
           }}

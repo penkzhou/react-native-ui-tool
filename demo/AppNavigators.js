@@ -6,7 +6,7 @@ import SafeAreaViewPlus from './safeAreaViewPlus'
 import StatusBarPlus from './statusBarPlus'
 import NavigationBar from './navigationBar'
 import VerticalView from './verticalView'
-import TopBarPage from './topBarPage'
+import TabPage from './tabPage'
 
 const AppNavigators = createStackNavigator({
   Main: {
@@ -51,8 +51,8 @@ const AppNavigators = createStackNavigator({
       header: null
     }
   },
-  TopBarPage: {
-    screen: TopBarPage,
+  TabPage: {
+    screen: TabPage,
     navigationOptions: {
       header: null
     }

@@ -9,9 +9,10 @@ import FormItem from './src/form/FormItem'
 import Line from './src/Line'
 import Toast from './src/Toast'
 import Loading from './src/Loading'
-import TopBarPage from './src/TopBarPage'
 import ListPage from './src/ListPage'
 import TabNavigator from './src/TabNavigator'
+import StickyPage from './src/StickyPage'
+import TabPage from './src/TabPage'
 
 export {
   Button,
@@ -25,7 +26,8 @@ export {
   Line,
   Toast,
   Loading,
-  TopBarPage,
   ListPage,
-  TabNavigator
+  TabNavigator,
+  StickyPage,
+  TabPage
 }

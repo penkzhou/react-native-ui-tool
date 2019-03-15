@@ -21,12 +21,9 @@ export default class ListPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pageParams: {
-        PageIndex: 1,
-        PageSize: 20
-      },
+      pageIndex: 1,
+      pageTotal: 0,
       dataList: [],
-      total: 0,
       refreshing: false,
       loadingMore: false
     }
@@ -41,39 +38,33 @@ export default class ListPage extends React.Component {
 
   // 刷新事件
   refreshEvent = () => {
-    const {PageSize} = this.state.pageParams
-    const pageParams = {
-      PageIndex: 1,
-      PageSize
-    }
     this.setState({
       refreshing: true,
       total: 0,
-      pageParams
+      pageIndex: 1
     })
-    this.getDataList(pageParams)
+    this.getDataList(1)
   }
 
   // 加载更多事件
   loadMoreEvent = () => {
-    const {pageParams, total, dataList} = this.state
-    pageParams.PageIndex += 1
-    if (total && dataList.length < total) {
+    const {pageIndex, pageTotal, dataList} = this.state
+    if (pageTotal && dataList.length < pageTotal) {
       this.setState({
         loadingMore: true,
-        pageParams
+        pageIndex: pageIndex + 1
       })
-      this.getDataList(pageParams)
+      this.getDataList(pageIndex + 1)
     }
   }
 
   // 获取数据
-  getDataList = (pageParams) => {
-    const {params, getDataFunc} = this.props
-    getDataFunc({...params, ...pageParams}).then(({dataList, total}) => {
-      const prev = pageParams.PageIndex <= 1 ? [] : this.state.dataList
+  getDataList = (pageIndex) => {
+    const {getDataFunc} = this.props
+    getDataFunc({pageIndex}).then(({dataList, pageTotal}) => {
+      const prev = pageIndex <= 1 ? [] : this.state.dataList
       this.setState({
-        total,
+        pageTotal,
         loadingMore: false,
         refreshing: false,
         dataList: prev.concat(dataList)

@@ -8,19 +8,20 @@ import ListPage from './ListPage'
 export default class TabNavigator extends React.Component {
   static propTypes = {
     // tab头部
-    items: PropTypes.array.isRequired,
-    // tab页 -> render组件 或 List
-    tabPage: PropTypes.oneOfType([
-      PropTypes.oneOf(['List']),
-      PropTypes.element
-    ]),
+    items: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      params: PropTypes.any,
+      screen: PropTypes.element.isRequired
+    })).isRequired,
     // 传递给TabPage的额外参数
-    listProps: PropTypes.object
+    extraProps: PropTypes.object,
+    tabBarOptions: PropTypes.object
   }
 
   static defaultProps = {
     tabPage: 'List',
-    listProps: {}
+    extraProps: {},
+    tabBarOptions: {}
   }
 
   componentDidMount() {
@@ -29,11 +30,11 @@ export default class TabNavigator extends React.Component {
   // 获取tabs页面
   getTabs = () => {
     const tabs = {}
-    const {items, tabPage, listProps} = this.props
-    const TabPage = tabPage === 'List' ? ListPage : tabPage
+    const {items, extraProps} = this.props
     items.forEach((item, index) => {
+      const Screen = item.screen
       tabs[`tab${index}`] = {
-        screen: props => (<TabPage {...props} {...listProps} params={item.params} />),
+        screen: props => (<Screen {...props} {...extraProps} params={item.params} />),
         navigationOptions: {
           title: item.name
         }
@@ -43,22 +44,23 @@ export default class TabNavigator extends React.Component {
   }
 
   // 获取tabs导航
-  getTabNavigator = () => createAppContainer(createMaterialTopTabNavigator(
-    this.getTabs(), {
-      tabBarOptions: {
-        tabStyle: styles.tabStyle,
-        upperCaseLabel: false, // 是否使标签大写，默认为true
-        scrollEnabled: true, // 是否支持 选项卡滚动，默认false
-        style: {
-          backgroundColor: Style.mainColor, // TabBar 的背景颜色
-          height: 30// fix 开启scrollEnabled后再Android上初次加载时闪烁问题
+  getTabNavigator = () => {
+    const {tabBarOptions} = this.props
+    return createAppContainer(createMaterialTopTabNavigator(
+      this.getTabs(), {
+        tabBarOptions: {
+          tabStyle: styles.tabBarStyle,
+          upperCaseLabel: false,
+          scrollEnabled: true,
+          style: styles.tabStyle,
+          indicatorStyle: styles.indicatorStyle,
+          labelStyle: styles.labelStyle,
+          ...tabBarOptions
         },
-        indicatorStyle: styles.indicatorStyle, // 标签指示器的样式
-        labelStyle: styles.labelStyle// 文字的样式
-      },
-      lazy: true
-    }
-  ))
+        lazy: true
+      }
+    ))
+  }
 
   render() {
     const TabWrapperNavigator = this.getTabNavigator()
@@ -73,9 +75,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  tabStyle: {
-    // minWidth: 50 //fix minWidth会导致tabStyle初次加载时闪烁
+  tabBarStyle: {
     padding: 0
+  },
+  tabStyle: {
+    backgroundColor: Style.mainColor,
+    height: 30
   },
   indicatorStyle: {
     height: 2,

@@ -18,7 +18,7 @@ export default class Index extends React.Component {
       'StatusBarPlus',
       'NavigationBar',
       'VerticalView',
-      'TopBarPage'
+      'TabPage'
     ]
     const data = items.map(title => ({
       title,

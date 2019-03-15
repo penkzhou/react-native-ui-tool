@@ -9,7 +9,12 @@ const Process = global.UiToolViewProcess || class {}
 
 export default class VerticalView extends React.Component {
   static propTypes = {
-    data: PropTypes.array,
+    data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      text: PropTypes.string,
+      onPress: PropTypes.func,
+      process: PropTypes.string
+    }))),
     lineHeight: PropTypes.number,
     paddingVertical: PropTypes.number,
     paddingHorizontal: PropTypes.number,
@@ -17,14 +22,7 @@ export default class VerticalView extends React.Component {
   }
 
   static defaultProps = {
-    data: [
-      {
-        label: '标题',
-        text: '内容',
-        onPress: () => {},
-        process: 'date'
-      }
-    ],
+    data: [],
     lineHeight: 25,
     paddingVertical: 10,
     paddingHorizontal: 5,

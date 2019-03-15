@@ -9,7 +9,7 @@ export default class StatusBarPlus extends React.Component {
     backgroundColor: PropTypes.string,
     barStyle: PropTypes.oneOf(['light-content', 'default']),
     hidden: PropTypes.bool
-  };
+  }
 
   // 设置默认属性
   static defaultProps = {

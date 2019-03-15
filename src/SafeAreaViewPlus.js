@@ -12,8 +12,8 @@ export default class SafeAreaViewPlus extends React.Component {
     enablePlus: PropTypes.bool,
     topInset: PropTypes.bool,
     bottomInset: PropTypes.bool,
-    style: ViewPropTypes.styles,
-    children: PropTypes.element.isRequired
+    style: ViewPropTypes.style,
+    children: PropTypes.any.isRequired
   }
 
   static defaultProps = {
