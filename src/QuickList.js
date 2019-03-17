@@ -3,8 +3,8 @@ import {
   SwipeableFlatList
 } from 'react-native'
 import {PropTypes} from 'prop-types'
-import Style from './Style'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Style from './Style'
 import QuickActions from './QuickActions'
 import Empty from './Empty'
 
@@ -34,6 +34,7 @@ export default class QuickList extends React.Component {
   }
 
   close = () => {
+    /* eslint-disable no-underscore-dangle */
     this.list._onClose()
   }
 
@@ -53,7 +54,9 @@ export default class QuickList extends React.Component {
   }
 
   render() {
-    const {data, renderItem, onAdd, addText} = this.props
+    const {
+      data, renderItem, onAdd, addText
+    } = this.props
     if (data instanceof Array) {
       const btns = this.getBtns()
       return (
@@ -70,7 +73,7 @@ export default class QuickList extends React.Component {
           maxSwipeDistance={Style.listQuickWidth * btns.length}
           bounceFirstRowOnMount={false}
           disableVirtualization={false}
-          keyExtractor={(it, idx) => idx + ''}
+          keyExtractor={(it, idx) => `${idx}`}
           ListEmptyComponent={() => (<Empty onAdd={onAdd} addText={addText} />)}
         />
       )

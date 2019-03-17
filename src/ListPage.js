@@ -3,7 +3,6 @@ import {PropTypes} from 'prop-types'
 import {
   StyleSheet, ActivityIndicator, Text, View, FlatList, RefreshControl
 } from 'react-native'
-import RefreshControlPlus from './RefreshControlPlus'
 import Style from './Style'
 
 export default class ListPage extends React.Component {
@@ -41,7 +40,7 @@ export default class ListPage extends React.Component {
   refreshEvent = () => {
     this.setState({
       refreshing: true,
-      total: 0,
+      pageTotal: 0,
       pageIndex: 1
     })
     this.getDataList(1)
@@ -49,7 +48,7 @@ export default class ListPage extends React.Component {
 
   // 加载更多事件
   loadMoreEvent = () => {
-    const {pageIndex, pageTotal, dataList} = this.state
+    const {pageIndex, pageTotal} = this.state
     if (pageTotal && pageIndex < pageTotal) {
       this.setState({
         loadingMore: true,
@@ -108,7 +107,16 @@ export default class ListPage extends React.Component {
           data={dataList}
           renderItem={renderItem}
           keyExtractor={data => data[idKey]}
-          refreshControl={<RefreshControlPlus refreshing={refreshing} onRefresh={this.refreshEvent} />}
+          refreshControl={(
+            <RefreshControl
+              title={Style.loadingTitle}
+              titleColor={Style.loadingColor}
+              colors={[Style.loadingColor]}
+              refreshing={refreshing}
+              onRefresh={this.refreshEvent}
+              tintColor={Style.loadingColor}
+            />
+          )}
           ListFooterComponent={this.genIndicator}
           onEndReached={this.onEndReached}
           onEndReachedThreshold={0.5}

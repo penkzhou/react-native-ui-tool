@@ -1,10 +1,11 @@
 {
   "name": "react-native-ui-tool",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A package for react-native",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ext .js ./src --fix"
   },
   "peerDependencies": {
     "async-validator": ">=1.10.1",

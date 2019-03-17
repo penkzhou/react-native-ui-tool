@@ -72,7 +72,9 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const {style, formStyle, behavior, inputs, header, bottom} = this.props
+    const {
+      style, formStyle, behavior, inputs, header, bottom
+    } = this.props
     return (
       <KeyboardAvoidingView
         style={[styles.container, formStyle]}

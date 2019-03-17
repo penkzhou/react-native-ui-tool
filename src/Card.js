@@ -3,8 +3,8 @@ import {PropTypes} from 'prop-types'
 import {
   StyleSheet, Text, TouchableOpacity, View, ViewPropTypes
 } from 'react-native'
-import Style from './Style'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import Style from './Style'
 
 export default class Card extends React.Component {
   static propTypes = {
@@ -91,7 +91,7 @@ export default class Card extends React.Component {
       <View
         style={[styles.container, {
           paddingTop: paddingTop ? Style.cardPadding : 0,
-          paddingBottom: paddingBottom ? Style.cardPadding: 0
+          paddingBottom: paddingBottom ? Style.cardPadding : 0
         }]}
       >
         <View style={styles.cardBox}>

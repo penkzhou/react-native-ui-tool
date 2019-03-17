@@ -53,7 +53,6 @@ class Toast extends Component {
     this.state = {
       isShow: false,
       text: '',
-      keyBoard: 0,
       opacityValue: new Animated.Value(this.props.opacity)
     }
   }

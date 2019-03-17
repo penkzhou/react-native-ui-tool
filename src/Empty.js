@@ -3,8 +3,8 @@ import {
   StyleSheet, Text, View, Image
 } from 'react-native'
 import {PropTypes} from 'prop-types'
+import {Button} from 'react-native-ui-tool'
 import Style from './Style'
-import {Button} from "react-native-ui-tool";
 
 export default class Empty extends React.Component {
   static propTypes = {
@@ -24,7 +24,9 @@ export default class Empty extends React.Component {
   }
 
   render() {
-    const {show, text, bottom, onAdd, addText} = this.props
+    const {
+      show, text, bottom, onAdd, addText
+    } = this.props
     if (show) {
       return (
         <View style={styles.container}>

@@ -1,11 +1,8 @@
 import React from 'react'
-import {
-  DeviceInfo, SafeAreaView, StyleSheet, View, ViewPropTypes, BackHandler
-} from 'react-native'
+import {BackHandler} from 'react-native'
 import {PropTypes} from 'prop-types'
 import SafeAreaViewPlus from './SafeAreaViewPlus'
 import NavigationBar from './NavigationBar'
-import StatusBarPlus from './StatusBarPlus'
 import Style from './Style'
 
 export default class TabPage extends React.Component {
@@ -26,10 +23,6 @@ export default class TabPage extends React.Component {
     barStyle: Style.barStyle
   }
 
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackEvent)
   }
@@ -39,7 +32,9 @@ export default class TabPage extends React.Component {
   }
 
   render() {
-    const {title, rightButton, children, tabColor, barStyle, onBackEvent} = this.props
+    const {
+      title, rightButton, children, tabColor, barStyle, onBackEvent
+    } = this.props
     return (
       <SafeAreaViewPlus topColor={tabColor}>
         <NavigationBar

@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native'
 import {PropTypes} from 'prop-types'
 import {createMaterialTopTabNavigator, createAppContainer} from 'react-navigation'
 import Style from './Style'
-import ListPage from './ListPage'
 
 export default class TabNavigator extends React.Component {
   static propTypes = {
@@ -19,7 +18,6 @@ export default class TabNavigator extends React.Component {
   }
 
   static defaultProps = {
-    tabPage: 'List',
     extraProps: {},
     tabBarOptions: {}
   }

@@ -1,9 +1,8 @@
 import React from 'react'
 import {PropTypes} from 'prop-types'
 import {
-  SectionList, StyleSheet, View, FlatList, Text, TouchableWithoutFeedback
+  SectionList, StyleSheet, View, FlatList, Text, TouchableWithoutFeedback, RefreshControl
 } from 'react-native'
-import RefreshControlPlus from './RefreshControlPlus'
 import Style from './Style'
 
 export default class StickyPage extends React.Component {
@@ -176,10 +175,19 @@ export default class StickyPage extends React.Component {
         )}
         renderSectionHeader={this.renderSectionHeader}
         stickySectionHeadersEnabled
-        keyExtractor={(item, index) => index + ''}
+        keyExtractor={(item, index) => `${index}`}
         renderItem={this.renderItem}
         sections={sections}
-        refreshControl={<RefreshControlPlus refreshing={refreshing} onRefresh={this.refreshEvent} />}
+        refreshControl={(
+          <RefreshControl
+            title={Style.loadingTitle}
+            titleColor={Style.loadingColor}
+            colors={[Style.loadingColor]}
+            refreshing={refreshing}
+            onRefresh={this.refreshEvent}
+            tintColor={Style.loadingColor}
+          />
+        )}
       />
     )
   }
@@ -188,7 +196,7 @@ export default class StickyPage extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Style.stickyBackgroundColor,
+    backgroundColor: Style.stickyBackgroundColor
   },
   header: {
     borderBottomWidth: Style.stickyBackgroundHeight,
