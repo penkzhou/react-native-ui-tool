@@ -4,7 +4,6 @@ import {
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {PropTypes} from 'prop-types'
-import StatusBarPlus from './StatusBarPlus'
 import Style from './Style'
 
 export default class NavigationBar extends React.Component {
@@ -60,7 +59,6 @@ export default class NavigationBar extends React.Component {
     } = this.props
     return (
       <View style={[{backgroundColor}, style]}>
-        <StatusBarPlus backgroundColor={backgroundColor} />
         <View style={styles.navBar}>
           <View style={styles.navBarButton}>
             {this.getLeftButton()}

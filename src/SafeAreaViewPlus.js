@@ -3,6 +3,7 @@ import {
   DeviceInfo, SafeAreaView, StyleSheet, View, ViewPropTypes
 } from 'react-native'
 import {PropTypes} from 'prop-types'
+import StatusBarPlus from './StatusBarPlus'
 import Style from './Style'
 
 export default class SafeAreaViewPlus extends React.Component {
@@ -13,7 +14,8 @@ export default class SafeAreaViewPlus extends React.Component {
     topInset: PropTypes.bool,
     bottomInset: PropTypes.bool,
     style: ViewPropTypes.style,
-    children: PropTypes.any.isRequired
+    children: PropTypes.any.isRequired,
+    barStyle: PropTypes.oneOf(['light-content', 'default'])
   }
 
   static defaultProps = {
@@ -22,7 +24,21 @@ export default class SafeAreaViewPlus extends React.Component {
     enablePlus: true,
     topInset: true,
     bottomInset: false,
-    style: {}
+    style: {},
+    barStyle: Style.barStyle
+  }
+
+  getStatusBar = () => {
+    const {
+      topColor, barStyle, topInset
+    } = this.props
+    return (
+      <StatusBarPlus
+        backgroundColor={topColor}
+        barStyle={barStyle}
+        hidden={!topInset}
+      />
+    )
   }
 
   genSafeAreaViewPlus() {
@@ -31,6 +47,7 @@ export default class SafeAreaViewPlus extends React.Component {
     } = this.props
     return (
       <View style={[styles.container, this.props.style]}>
+        {this.getStatusBar()}
         {!DeviceInfo.isIPhoneX_deprecated || !topInset ? null : <View style={[styles.topArea, {backgroundColor: topColor}]} />}
         {children}
         {!DeviceInfo.isIPhoneX_deprecated || !bottomInset ? null : <View style={[styles.bottomArea, {backgroundColor: bottomColor}]} />}
@@ -42,6 +59,7 @@ export default class SafeAreaViewPlus extends React.Component {
     const {children, style} = this.props
     return (
       <SafeAreaView style={[styles.container, style]} {...this.props}>
+        {this.getStatusBar()}
         {children}
       </SafeAreaView>
     )

@@ -3,12 +3,13 @@ import {PropTypes} from 'prop-types'
 import {
   StyleSheet, ActivityIndicator, Text, View, FlatList, RefreshControl
 } from 'react-native'
+import RefreshControlPlus from './RefreshControlPlus'
 import Style from './Style'
 
 export default class ListPage extends React.Component {
   static propTypes = {
     params: PropTypes.object,
-    renderItem: PropTypes.any.isRequired,
+    renderItem: PropTypes.func.isRequired,
     getDataFunc: PropTypes.func.isRequired,
     idKey: PropTypes.string
   }
@@ -49,7 +50,7 @@ export default class ListPage extends React.Component {
   // 加载更多事件
   loadMoreEvent = () => {
     const {pageIndex, pageTotal, dataList} = this.state
-    if (pageTotal && dataList.length < pageTotal) {
+    if (pageTotal && pageIndex < pageTotal) {
       this.setState({
         loadingMore: true,
         pageIndex: pageIndex + 1
@@ -60,8 +61,8 @@ export default class ListPage extends React.Component {
 
   // 获取数据
   getDataList = (pageIndex) => {
-    const {getDataFunc} = this.props
-    getDataFunc({pageIndex}).then(({dataList, pageTotal}) => {
+    const {getDataFunc, params} = this.props
+    getDataFunc({pageIndex}, params).then(({dataList, pageTotal}) => {
       const prev = pageIndex <= 1 ? [] : this.state.dataList
       this.setState({
         pageTotal,
@@ -100,24 +101,14 @@ export default class ListPage extends React.Component {
 
   render() {
     const {idKey, renderItem} = this.props
-    const RenderItem = renderItem
     const {dataList, refreshing} = this.state
     return (
       <View style={styles.container}>
         <FlatList
           data={dataList}
-          renderItem={data => (<RenderItem {...data} />)}
+          renderItem={renderItem}
           keyExtractor={data => data[idKey]}
-          refreshControl={(
-            <RefreshControl
-              title="Loading"
-              titleColor={Style.mainColor}
-              colors={[Style.mainColor]}
-              refreshing={refreshing}
-              onRefresh={this.refreshEvent}
-              tintColor={Style.mainColor}
-            />
-          )}
+          refreshControl={<RefreshControlPlus refreshing={refreshing} onRefresh={this.refreshEvent} />}
           ListFooterComponent={this.genIndicator}
           onEndReached={this.onEndReached}
           onEndReachedThreshold={0.5}

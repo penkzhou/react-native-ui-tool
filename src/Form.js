@@ -2,7 +2,8 @@ import React from 'react'
 import {
   StyleSheet,
   KeyboardAvoidingView,
-  ViewPropTypes
+  ViewPropTypes,
+  View
 } from 'react-native'
 import PropTypes from 'prop-types'
 import FormItem from './form/FormItem'
@@ -12,15 +13,21 @@ export default class Form extends React.Component {
   static propTypes = {
     behavior: PropTypes.oneOf(['height', 'position', 'padding']),
     formStyle: ViewPropTypes.style,
+    style: ViewPropTypes.style,
     inputs: PropTypes.array,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    header: PropTypes.func,
+    bottom: PropTypes.func
   }
 
   static defaultProps = {
     behavior: 'padding',
-    formStyle: null,
+    formStyle: {},
+    style: {},
     inputs: [],
-    onChange: () => {}
+    onChange: () => {},
+    header: null,
+    bottom: null
   }
 
   constructor(props) {
@@ -65,20 +72,24 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const {formStyle, behavior, inputs} = this.props
+    const {style, formStyle, behavior, inputs, header, bottom} = this.props
     return (
       <KeyboardAvoidingView
         style={[styles.container, formStyle]}
         behavior={behavior}
       >
-        {inputs.map(input => (
-          <FormItem
-            ref={input.name}
-            key={input.name}
-            input={input}
-            onChange={this.itemChangeEvent}
-          />
-        ))}
+        {header && header()}
+        <View style={style}>
+          {inputs.map(input => (
+            <FormItem
+              ref={input.name}
+              key={input.name}
+              input={input}
+              onChange={this.itemChangeEvent}
+            />
+          ))}
+        </View>
+        {bottom && bottom()}
       </KeyboardAvoidingView>
     )
   }

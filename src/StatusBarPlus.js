@@ -13,7 +13,7 @@ export default class StatusBarPlus extends React.Component {
 
   // 设置默认属性
   static defaultProps = {
-    barStyle: 'light-content',
+    barStyle: Style.barStyle,
     backgroundColor: Style.mainColor,
     hidden: false
   }
@@ -21,8 +21,12 @@ export default class StatusBarPlus extends React.Component {
   render() {
     const {barStyle, hidden, backgroundColor} = this.props
     return (
-      <View style={{height: Style.statusBarHeight}}>
-        <StatusBar barStyle={barStyle} hidden={hidden} backgroundColor={backgroundColor} />
+      <View style={{height: Style.statusBarHeight, backgroundColor}}>
+        <StatusBar
+          barStyle={barStyle}
+          hidden={hidden}
+          backgroundColor={backgroundColor}
+        />
       </View>
     )
   }

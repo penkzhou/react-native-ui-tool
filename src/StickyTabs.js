@@ -1,12 +1,12 @@
 import React from 'react'
 import {PropTypes} from 'prop-types'
 import {
-  SectionList, StyleSheet, View, FlatList, Text, TouchableWithoutFeedback
+  SectionList, StyleSheet, View, FlatList, Text, TouchableWithoutFeedback, RefreshControl
 } from 'react-native'
 import RefreshControlPlus from './RefreshControlPlus'
 import Style from './Style'
 
-export default class StickyPage extends React.Component {
+export default class StickyTabs extends React.Component {
   static propTypes = {
     tabs: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string.isRequired,
@@ -57,9 +57,8 @@ export default class StickyPage extends React.Component {
 
   // 进入页面事件
   screenDataInit = () => {
-    if (this.screen && this.screen.dataInit instanceof Function) {
-      this.screen.dataInit()
-    }
+    const {dataInit} = this.screen
+    if (dataInit instanceof Function) dataInit()
   }
 
   // 下拉刷新事件
@@ -111,22 +110,24 @@ export default class StickyPage extends React.Component {
   }
 
   renderSectionHeader = () => {
+    const {refreshing, active} = this.state
+    console.log(this.state)
     const {tabs} = this.props
-    const {active} = this.state
     return (
       <FlatList
         style={styles.tabContainer}
         data={tabs}
         horizontal
-        extraData={active}
         showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => this.renderTabItem(item, item.key === active)}
+        renderItem={({item}) => this.renderTabItem(item, active)}
       />
     )
   }
 
-  renderTabItem = (item, isActive) => {
+  renderTabItem = (item, active) => {
+    console.log(this.state)
     const {renderTabItem} = this.props
+    const isActive = item.key === this.state.active
     if (renderTabItem) return renderTabItem({item}, isActive)
     const textStyle = {}
     const indicatorStyle = {}
@@ -164,22 +165,14 @@ export default class StickyPage extends React.Component {
   }
 
   render() {
-    const {refreshing} = this.state
-    const sections = [{key: 'key', data: ['item']}]
+    const {tabs, active} = this.props
     return (
-      <SectionList
-        style={styles.container}
-        ListHeaderComponent={(
-          <View style={styles.header}>
-            {this.props.header()}
-          </View>
-        )}
-        renderSectionHeader={this.renderSectionHeader}
-        stickySectionHeadersEnabled
-        keyExtractor={(item, index) => index + ''}
-        renderItem={this.renderItem}
-        sections={sections}
-        refreshControl={<RefreshControlPlus refreshing={refreshing} onRefresh={this.refreshEvent} />}
+      <FlatList
+        style={styles.tabContainer}
+        data={tabs}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        renderItem={({item}) => this.renderTabItem(item, active)}
       />
     )
   }

@@ -5,6 +5,8 @@ import {
 import {PropTypes} from 'prop-types'
 import SafeAreaViewPlus from './SafeAreaViewPlus'
 import NavigationBar from './NavigationBar'
+import StatusBarPlus from './StatusBarPlus'
+import Style from './Style'
 
 export default class TabPage extends React.Component {
   static propTypes = {
@@ -12,14 +14,16 @@ export default class TabPage extends React.Component {
     onBackEvent: PropTypes.func,
     rightButton: PropTypes.element,
     children: PropTypes.element,
-    safePlus: PropTypes.bool
+    tabColor: PropTypes.string,
+    barStyle: PropTypes.oneOf(['light-content', 'default'])
   }
 
   static defaultProps = {
     rightButton: null,
     children: null,
-    safePlus: false,
-    onBackEvent: () => {}
+    onBackEvent: () => {},
+    tabColor: Style.mainColor,
+    barStyle: Style.barStyle
   }
 
   constructor(props) {
@@ -34,17 +38,16 @@ export default class TabPage extends React.Component {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackEvent)
   }
 
-  // 后退事件
-  onBackEvent = () => this.props.onBackEvent()
-
   render() {
-    const {title, rightButton, children, safePlus} = this.props
+    const {title, rightButton, children, tabColor, barStyle, onBackEvent} = this.props
     return (
-      <SafeAreaViewPlus enablePlus={safePlus}>
+      <SafeAreaViewPlus topColor={tabColor}>
         <NavigationBar
-          backEvent={this.onBackEvent}
+          backgroundColor={tabColor}
+          backEvent={() => { onBackEvent() }}
           title={title}
           rightButton={rightButton}
+          barStyle={barStyle}
         />
         {children}
       </SafeAreaViewPlus>

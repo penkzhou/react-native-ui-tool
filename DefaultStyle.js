@@ -13,19 +13,19 @@ export default class DefaultStyle {
 
   static cyanDark = '#6dbccd'
 
-  static mainColor = DefaultStyle.blue
+  static dark1 = '#000'
 
-  static mainColorFocus = DefaultStyle.blueDark
+  static dark2 = '#333333'
 
-  static borderColor = '#e3e3e3'
+  static dark3 = '#505050'
 
-  static textColor = '#333'
+  static dark4 = '#666666'
 
-  static labelColor = '#aaa'
+  static dark5 = '#aaa'
 
-  static placeholderColor = '#666666'
+  static dark6 = '#e3e3e3'
 
-  static primary = DefaultStyle.mainColor
+  static dark7 = '#f1f1f1'
 
   static success = '#5cb85c'
 
@@ -33,12 +33,65 @@ export default class DefaultStyle {
 
   static danger = '#d9534f'
 
+  static white = '#ffffff'
+
+  static mainColor = DefaultStyle.blue
+
+  static mainColorFocus = DefaultStyle.blueDark
+
+  static borderColor = DefaultStyle.dark6
+
+  static textColor = DefaultStyle.dark2
+
+  static labelColor = DefaultStyle.dark5
+
+  static placeholderColor = DefaultStyle.dark4
+
+  static primary = DefaultStyle.mainColor
+
+  // Loading
+  static loadingTitle = 'Loading'
+
+  static loadingColor = DefaultStyle.mainColor
+
+  // Empty
+  static emptySource = require('./img/empty.png')
+
+  static emptyPadding = 20
+
+  static emptyWidth = 100
+
+  static emptyHeight = 60
+
+  static emptyText = '暂无数据'
+
+  static emptyTextColor = DefaultStyle.dark5
+
+  static emptyTextSize = 12
+
+  static emptyAddText = '添加'
+
+  static emptyAddBackgroundColor = DefaultStyle.white
+
+  static emptyAddTextColor = DefaultStyle.mainColor
+
+  static emptyAddTextSize = DefaultStyle.emptyTextSize
+
+  static emptyAddTextHeight = 28
+
+  static emptyAddTextPadding = 20
+
   // Button
   static btnBorderRadius = 2
 
   static btnHeight = 35
 
   static btnFontSize = 12
+
+  // ActionSheet
+  static actionSheetCancelText = '取消'
+
+  static actionSheetTintColor = '#007AFF'
 
   // SafeAreaViewPlus
   static safeAreaTopHeight = 44
@@ -72,6 +125,82 @@ export default class DefaultStyle {
   static formTextColor = '#000000'
 
   static formPlaceholderColor = '#cdd3e3'
+
+  // StickyPage
+  static stickyBackgroundColor = DefaultStyle.dark7
+
+  static stickyBackgroundHeight = 15
+
+  static stickyBackgroundBottom = 50
+
+  static stickyTabBackgroundColor = DefaultStyle.white
+
+  static stickyTabPadding = 20
+
+  static stickyTabHeight = 40
+
+  static stickyTabTextColor = DefaultStyle.dark4
+
+  static stickyTabTextActiveColor = DefaultStyle.mainColor
+
+  static stickyIndicatorBackgroundColor = DefaultStyle.mainColor
+
+  static stickyIndicatorHeight = 2
+
+  // Card
+  static cardPadding = 15
+
+  static cardBackground = DefaultStyle.dark7
+
+  static cardTitleHeight = 50
+
+  static cardTitleSize = 16
+
+  static cardTitleColor = DefaultStyle.dark2
+
+  static cardLabelHeight = 40
+
+  static cardLabelSize = 14
+
+  static cardLabelColor = DefaultStyle.dark4
+
+  static cardTextHeight = 40
+
+  static cardTextSize = 14
+
+  static cardTextColor = DefaultStyle.dark2
+
+  static cardArrowSize = 20
+
+  static cardArrowColor = DefaultStyle.dark5
+
+  static cardBodyPaddingLeft = 20
+
+  // List
+  static listTitleColor = DefaultStyle.dark3
+
+  static listTitleSize = 15
+
+  static listTitleHeight = 30
+
+  static listGrayColor = DefaultStyle.dark5
+
+  static listGraySize = 10
+
+  static listIconColor = DefaultStyle.dark3
+
+  static listQuickWidth = 80
+
+  static listQuickBackgroundColor = DefaultStyle.dark6
+
+  static listQuickColor = DefaultStyle.dark3
+
+  static listQuickIconSize = 20
+
+  static listQuickTextSize = 14
+
+  // 导航栏样式
+  static barStyle = 'default'
 
   // 导航栏在iOS中的高度
   static navBarHeightIos = 44

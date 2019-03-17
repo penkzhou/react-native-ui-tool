@@ -11,7 +11,7 @@ export default class TabNavigator extends React.Component {
     items: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string.isRequired,
       params: PropTypes.any,
-      screen: PropTypes.element.isRequired
+      screen: PropTypes.func.isRequired
     })).isRequired,
     // 传递给TabPage的额外参数
     extraProps: PropTypes.object,
@@ -36,7 +36,7 @@ export default class TabNavigator extends React.Component {
       tabs[`tab${index}`] = {
         screen: props => (<Screen {...props} {...extraProps} params={item.params} />),
         navigationOptions: {
-          title: item.name
+          title: item.text
         }
       }
     })

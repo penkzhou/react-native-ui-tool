@@ -5,7 +5,6 @@ import {
   Animated,
   Text,
   ViewPropTypes,
-  Keyboard,
   Dimensions
 } from 'react-native'
 
@@ -33,7 +32,8 @@ class Toast extends Component {
     fadeInDuration: PropTypes.number,
     fadeOutDuration: PropTypes.number,
     opacity: PropTypes.number,
-    defaultCloseDelay: PropTypes.number
+    defaultCloseDelay: PropTypes.number,
+    keyboard: PropTypes.number // 可在外部监听键盘事件，传递键盘高度至内部
   }
 
   static defaultProps = {
@@ -44,7 +44,8 @@ class Toast extends Component {
     fadeInDuration: 500,
     fadeOutDuration: 500,
     opacity: 0.6,
-    defaultCloseDelay: 250
+    defaultCloseDelay: 250,
+    keyboard: 0
   }
 
   constructor(props) {
@@ -57,28 +58,9 @@ class Toast extends Component {
     }
   }
 
-  componentWillMount() {
-    this.keyboardShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardShow)
-    this.keyboardHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardHide)
-  }
-
   componentWillUnmount() {
-    this.keyboardShowListener.remove()
-    this.keyboardHideListener.remove()
     if (this.animation) this.animation.stop()
     if (this.timer) clearTimeout(this.timer)
-  }
-
-  keyboardShow = (e) => {
-    this.setState({
-      keyBoard: e.endCoordinates.height
-    })
-  }
-
-  keyboardHide = () => {
-    this.setState({
-      keyBoard: 0
-    })
   }
 
   show = (text, duration, callback) => {
@@ -129,18 +111,17 @@ class Toast extends Component {
   }
 
   getViewStyle = () => {
-    const {keyBoard} = this.state
-    const {positionValue} = this.props
+    const {positionValue, keyboard} = this.props
     let top = positionValue
     switch (this.props.position) {
       case 'top':
         top = positionValue
         break
       case 'center':
-        top = (height - keyBoard) / 2
+        top = (height - keyboard) / 2
         break
       default:
-        top = height - keyBoard - positionValue
+        top = height - keyboard - positionValue
     }
     return [styles.container, {top}]
   }
