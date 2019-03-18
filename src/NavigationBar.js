@@ -1,8 +1,7 @@
 import React from 'react'
 import {
-  ViewPropTypes, Text, StyleSheet, View, TouchableOpacity
+  ViewPropTypes, Text, StyleSheet, View
 } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import {PropTypes} from 'prop-types'
 import Style from './Style'
 
@@ -11,7 +10,6 @@ export default class NavigationBar extends React.Component {
   static propTypes = {
     backgroundColor: PropTypes.string,
     style: ViewPropTypes.style,
-    backEvent: PropTypes.func,
     leftButton: PropTypes.element,
     rightButton: PropTypes.element,
     titleLayoutStyle: ViewPropTypes.style,
@@ -26,7 +24,6 @@ export default class NavigationBar extends React.Component {
   static defaultProps = {
     backgroundColor: Style.mainColor,
     style: {},
-    backEvent: null,
     leftButton: null,
     rightButton: null,
     title: 'title',
@@ -34,34 +31,15 @@ export default class NavigationBar extends React.Component {
     titleLayoutStyle: {}
   }
 
-  getLeftButton = () => {
-    const {backEvent, leftButton} = this.props
-    if (backEvent instanceof Function) {
-      return (
-        <TouchableOpacity
-          style={{padding: 8, paddingLeft: 12}}
-          onPress={backEvent}
-        >
-          <Ionicons
-            name="ios-arrow-back"
-            size={Style.barBackIconSize}
-            style={{color: Style.barBackIconColor}}
-          />
-        </TouchableOpacity>
-      )
-    }
-    return leftButton
-  }
-
   render() {
     const {
-      backgroundColor, style, rightButton, title, titleLayoutStyle, titleStyle
+      backgroundColor, style, leftButton, rightButton, title, titleLayoutStyle, titleStyle
     } = this.props
     return (
       <View style={[{backgroundColor}, style]}>
         <View style={styles.navBar}>
           <View style={styles.navBarButton}>
-            {this.getLeftButton()}
+            {leftButton}
           </View>
           <View style={[styles.navBarTitleContainer, titleLayoutStyle]}>
             {React.isValidElement(title) ? title : <Text ellipsizeMode="head" numberOfLines={1} style={[styles.title, titleStyle]}>{title}</Text>}
