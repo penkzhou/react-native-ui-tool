@@ -2,12 +2,14 @@ import React from 'react'
 import {
   StyleSheet,
   KeyboardAvoidingView,
+  ActivityIndicator,
   ViewPropTypes,
   View
 } from 'react-native'
 import PropTypes from 'prop-types'
 import FormItem from './form/FormItem'
 import Validate from './form/Validate'
+import Style from './Style'
 
 export default class Form extends React.Component {
   static propTypes = {
@@ -16,9 +18,11 @@ export default class Form extends React.Component {
     formStyle: ViewPropTypes.style,
     style: ViewPropTypes.style,
     inputs: PropTypes.array,
+    original: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.func,
-    bottom: PropTypes.func
+    bottom: PropTypes.func,
+    loading: PropTypes.bool
   }
 
   static defaultProps = {
@@ -27,9 +31,11 @@ export default class Form extends React.Component {
     formStyle: {},
     style: {},
     inputs: [],
+    original: {},
     onChange: () => {},
     header: null,
-    bottom: null
+    bottom: null,
+    loading: false
   }
 
   constructor(props) {
@@ -42,7 +48,14 @@ export default class Form extends React.Component {
   // 表单验证 -> callback
   check = (callback, errorHandler) => {
     this.validate().then(({formData}) => {
-      if (callback instanceof Function) callback({formData})
+      if (callback instanceof Function) {
+        const {original} = this.props
+        callback({
+          formData,
+          original,
+          params: {...original, ...formData}
+        })
+      }
     }).catch((fields) => {
       if (errorHandler instanceof Function) errorHandler(fields)
     })
@@ -73,9 +86,18 @@ export default class Form extends React.Component {
     onChange(name, value)
   }
 
+  // Loading
+  renderLoading = () => (
+    <ActivityIndicator
+      animating
+      color={Style.mainColor}
+      size="large"
+    />
+  )
+
   render() {
     const {
-      behavior, keyboardVerticalOffset, style, formStyle, inputs, header, bottom
+      behavior, keyboardVerticalOffset, style, formStyle, inputs, header, bottom, loading
     } = this.props
     const Content = behavior === 'none' ? View : KeyboardAvoidingView
     return (
@@ -86,6 +108,7 @@ export default class Form extends React.Component {
         enabled
       >
         {header && header()}
+        {loading && this.renderLoading()}
         <View style={style}>
           {inputs.map(input => (
             <FormItem

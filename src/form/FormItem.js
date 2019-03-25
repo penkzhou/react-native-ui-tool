@@ -5,6 +5,9 @@ import {
 import PropTypes from 'prop-types'
 import Style from '../Style'
 import Validate from './Validate'
+import ShowText from './ShowText'
+import InputText from './InputText'
+import InputSelect from './InputSelect'
 
 export default class FormItem extends React.Component {
   static propTypes = {
@@ -19,7 +22,7 @@ export default class FormItem extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: this.props.input.value,
+      value: this.props.input.value || null,
       focus: false,
       warning: false,
       message: ''
@@ -68,10 +71,12 @@ export default class FormItem extends React.Component {
   }
 
   // 赋值回调
-  changeEvent = (value) => {
+  changeEvent = (value, blur = false) => {
     const {input, onChange} = this.props
     input.value = value
-    this.setState({value, warning: false})
+    this.setState({value, warning: false}, () => {
+      if (blur) this.blurEvent()
+    })
     onChange(input.name, value)
   }
 
@@ -96,45 +101,21 @@ export default class FormItem extends React.Component {
     return Style.formBorderColor
   }
 
-  renderInput = (input) => {
-    const {
-      warning, message, value
-    } = this.state
-    const {type} = input
+  renderInput = (input, value) => {
+    let Target = InputText
+    if (input.type === 'select') {
+      Target = InputSelect
+    }
     return (
-      <View style={styles.input_container}>
-        {type === 'text' && this.renderText(input, value)}
-        {/*{type === 'select' && this.renderSelect(input, value)}*/}
-        <View style={[styles.warning, {borderTopColor: this.getLineColor()}]}>
-          <Text style={styles.warning_text}>
-            {warning ? message : ''}
-          </Text>
-        </View>
-      </View>
+      <Target
+        input={input}
+        value={value}
+        onFocus={this.focusEvent}
+        onBlur={this.blurEvent}
+        onChange={this.changeEvent}
+      />
     )
   }
-
-  renderText = (input, value) => (
-    <TextInput
-      style={[styles.input, input.style]}
-      placeholder={input.placeholder}
-      value={value}
-      onChangeText={this.changeEvent}
-      onFocus={this.focusEvent}
-      onBlur={this.blurEvent}
-    />
-  )
-
-  renderSelect = (input, value) => (
-    <Picker
-      style={[styles.picker, input.style]}
-      selectedValue={value}
-      onValueChange={this.changeEvent}>
-      {input.option.map((opt, idx) => (
-        <Picker.Item key={idx} style={styles.pickerItem} label={opt.Text} value={opt.Value} />
-      ))}
-    </Picker>
-  )
 
   render() {
     const {input} = this.props
@@ -144,8 +125,7 @@ export default class FormItem extends React.Component {
       <View style={styles.container}>
         {React.isValidElement(input.prefix) ? input.prefix : null}
         <View style={styles.input_container}>
-          {input.type === 'text' && this.renderText(input, value)}
-          {input.type === 'select' && this.renderSelect(input, value)}
+          {this.renderInput(input, value)}
           <View style={[styles.warning, {borderTopColor}]}>
             <Text style={styles.warning_text}>
               {warning ? message : ''}
