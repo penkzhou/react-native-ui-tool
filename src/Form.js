@@ -11,7 +11,8 @@ import Validate from './form/Validate'
 
 export default class Form extends React.Component {
   static propTypes = {
-    behavior: PropTypes.oneOf(['height', 'position', 'padding']),
+    behavior: PropTypes.oneOf(['none', 'height', 'position', 'padding']),
+    keyboardVerticalOffset: PropTypes.number,
     formStyle: ViewPropTypes.style,
     style: ViewPropTypes.style,
     inputs: PropTypes.array,
@@ -21,7 +22,8 @@ export default class Form extends React.Component {
   }
 
   static defaultProps = {
-    behavior: 'padding',
+    behavior: 'none',
+    keyboardVerticalOffset: 0,
     formStyle: {},
     style: {},
     inputs: [],
@@ -73,12 +75,15 @@ export default class Form extends React.Component {
 
   render() {
     const {
-      style, formStyle, behavior, inputs, header, bottom
+      behavior, keyboardVerticalOffset, style, formStyle, inputs, header, bottom
     } = this.props
+    const Content = behavior === 'none' ? View : KeyboardAvoidingView
     return (
-      <KeyboardAvoidingView
+      <Content
         style={[styles.container, formStyle]}
         behavior={behavior}
+        keyboardVerticalOffset={keyboardVerticalOffset}
+        enabled
       >
         {header && header()}
         <View style={style}>
@@ -92,7 +97,7 @@ export default class Form extends React.Component {
           ))}
         </View>
         {bottom && bottom()}
-      </KeyboardAvoidingView>
+      </Content>
     )
   }
 }

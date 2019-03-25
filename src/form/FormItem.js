@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  StyleSheet, View, Text, TextInput
+  StyleSheet, View, Text, TextInput, Picker
 } from 'react-native'
 import PropTypes from 'prop-types'
 import Style from '../Style'
@@ -96,20 +96,15 @@ export default class FormItem extends React.Component {
     return Style.formBorderColor
   }
 
-  renderText = (input) => {
+  renderInput = (input) => {
     const {
       warning, message, value
     } = this.state
+    const {type} = input
     return (
       <View style={styles.input_container}>
-        <TextInput
-          style={[styles.input, input.style]}
-          placeholder={input.placeholder}
-          value={value}
-          onChangeText={this.changeEvent}
-          onFocus={this.focusEvent}
-          onBlur={this.blurEvent}
-        />
+        {type === 'text' && this.renderText(input, value)}
+        {/*{type === 'select' && this.renderSelect(input, value)}*/}
         <View style={[styles.warning, {borderTopColor: this.getLineColor()}]}>
           <Text style={styles.warning_text}>
             {warning ? message : ''}
@@ -119,17 +114,47 @@ export default class FormItem extends React.Component {
     )
   }
 
+  renderText = (input, value) => (
+    <TextInput
+      style={[styles.input, input.style]}
+      placeholder={input.placeholder}
+      value={value}
+      onChangeText={this.changeEvent}
+      onFocus={this.focusEvent}
+      onBlur={this.blurEvent}
+    />
+  )
+
+  renderSelect = (input, value) => (
+    <Picker
+      style={[styles.picker, input.style]}
+      selectedValue={value}
+      onValueChange={this.changeEvent}>
+      {input.option.map((opt, idx) => (
+        <Picker.Item key={idx} style={styles.pickerItem} label={opt.Text} value={opt.Value} />
+      ))}
+    </Picker>
+  )
+
   render() {
     const {input} = this.props
-    if (input.type === 'text') {
-      return this.renderText(input)
-    }
+    const {warning, message, value} = this.state
+    const borderTopColor = this.getLineColor()
     return (
       <View style={styles.container}>
         {React.isValidElement(input.prefix) ? input.prefix : null}
-        {(input.type === 'text') && this.renderText(input)}
+        <View style={styles.input_container}>
+          {input.type === 'text' && this.renderText(input, value)}
+          {input.type === 'select' && this.renderSelect(input, value)}
+          <View style={[styles.warning, {borderTopColor}]}>
+            <Text style={styles.warning_text}>
+              {warning ? message : ''}
+            </Text>
+          </View>
+        </View>
         {React.isValidElement(input.suffix) ? input.suffix : null}
       </View>
+
     )
   }
 }
@@ -139,12 +164,25 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   input_container: {
+    // borderWidth: 1,
+    // borderColor: 'yellow'
   },
   input: {
     padding: 0,
     height: Style.formTextHeight + Style.formTextPaddingVertical * 2,
     lineHeight: Style.formTextHeight,
     paddingVertical: Style.formTextPaddingVertical
+  },
+  picker: {
+    padding: 0,
+    height: Style.formTextHeight + Style.formTextPaddingVertical * 2,
+    lineHeight: Style.formTextHeight,
+    paddingVertical: Style.formTextPaddingVertical,
+    fontSize: 10
+  },
+  pickerItem: {
+    padding: 0,
+    fontSize: 10
   },
   warning: {
     borderTopWidth: 1,

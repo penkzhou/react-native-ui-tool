@@ -8,6 +8,7 @@ import VerticalView from './src/VerticalView'
 import Form from './src/Form'
 import FormItem from './src/form/FormItem'
 import Line from './src/Line'
+import Toast from './src/Toast'
 import Loading from './src/Loading'
 import ListPage from './src/ListPage'
 import TabNavigator from './src/TabNavigator'
@@ -29,6 +30,7 @@ export {
   Form,
   FormItem,
   Line,
+  Toast,
   Loading,
   ListPage,
   TabNavigator,

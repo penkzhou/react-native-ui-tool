@@ -1,5 +1,5 @@
 import React from 'react'
-import {BackHandler, TouchableOpacity, Platform} from 'react-native'
+import {BackHandler, TouchableOpacity, Text, View, StyleSheet} from 'react-native'
 import {PropTypes} from 'prop-types'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import SafeAreaViewPlus from './SafeAreaViewPlus'
@@ -11,7 +11,7 @@ export default class TabPage extends React.Component {
     title: PropTypes.string.isRequired,
     leftButton: PropTypes.func,
     onBackEvent: PropTypes.func,
-    rightButton: PropTypes.func,
+    rightButton: PropTypes.string,
     onRightEvent: PropTypes.func,
     children: PropTypes.element,
     tabColor: PropTypes.string,
@@ -29,15 +29,11 @@ export default class TabPage extends React.Component {
   }
 
   componentWillMount() {
-    if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', this.onBackEvent)
-    }
+    BackHandler.addEventListener('hardwareBackPress', this.onBackEvent)
   }
 
   componentWillUnmount() {
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress', this.onBackEvent)
-    }
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackEvent)
   }
 
   onBackEvent = () => {
@@ -55,7 +51,7 @@ export default class TabPage extends React.Component {
     } if (onBackEvent instanceof Function) {
       return (
         <TouchableOpacity
-          style={{padding: 8, paddingLeft: 12}}
+          style={styles.leftIcon}
           onPress={onBackEvent}
         >
           <Ionicons
@@ -70,13 +66,19 @@ export default class TabPage extends React.Component {
   }
 
   renderRightBtn = () => {
-    const {rightButton, onRightEvent} = this.props
-    if (rightButton instanceof Function) {
-      return rightButton()
-    } if (onRightEvent instanceof Function) {
+    const {rightButton, rightText, onRightEvent} = this.props
+    if (typeof rightButton === 'string') {
       return (
         <TouchableOpacity
-          style={{padding: 8, paddingRight: 12}}
+          style={{alignItems: 'center'}}
+          onPress={onRightEvent}>
+          <Text style={{fontSize: 18, color: '#FFFFFF', marginRight: 10}}>{rightButton}</Text>
+        </TouchableOpacity>
+      )
+    } else if (onRightEvent instanceof Function) {
+      return (
+        <TouchableOpacity
+          style={styles.rightIcon}
           onPress={onRightEvent}
         >
           <Ionicons
@@ -108,3 +110,19 @@ export default class TabPage extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  leftIcon: {
+    padding: 8,
+    paddingLeft: 12
+  },
+  rightIcon: {
+    padding: 8,
+    paddingRight: 12
+  },
+  rightText: {
+    fontSize: Style.barBackTextSize,
+    color: Style.barBackTextColor,
+    marginRight: 10
+  }
+})

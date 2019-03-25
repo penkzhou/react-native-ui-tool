@@ -103,6 +103,10 @@ export default class DefaultStyle {
 
   static barBackIconColor = 'white'
 
+  static barBackTextSize = 18
+
+  static barBackTextColor = 'white'
+
   // Form
   static formTextPaddingVertical = 5
 
