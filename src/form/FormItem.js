@@ -1,22 +1,23 @@
 import React from 'react'
 import {
-  StyleSheet, View, Text, TextInput, Picker
+  StyleSheet, View, Text
 } from 'react-native'
 import PropTypes from 'prop-types'
 import Style from '../Style'
 import Validate from './Validate'
-import ShowText from './ShowText'
 import InputText from './InputText'
 import InputSelect from './InputSelect'
 
 export default class FormItem extends React.Component {
   static propTypes = {
     input: PropTypes.object.isRequired,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    showLabel: PropTypes.bool
   }
 
   static defaultProps = {
-    onChange: () => {}
+    onChange: () => {},
+    showLabel: false
   }
 
   constructor(props) {
@@ -117,14 +118,21 @@ export default class FormItem extends React.Component {
     )
   }
 
+  renderLabel = (label) => (
+    <View style={styles.labelContainer}>
+      <Text style={styles.label}>{label}</Text>
+    </View>
+  )
+
   render() {
-    const {input} = this.props
+    const {input, showLabel} = this.props
     const {warning, message, value} = this.state
     const borderTopColor = this.getLineColor()
     return (
       <View style={styles.container}>
         {React.isValidElement(input.prefix) ? input.prefix : null}
-        <View style={styles.input_container}>
+        <View style={styles.inputContainer}>
+          {showLabel && input.label && this.renderLabel(input.label)}
           {this.renderInput(input, value)}
           <View style={[styles.warning, {borderTopColor}]}>
             <Text style={styles.warning_text}>
@@ -143,7 +151,15 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative'
   },
-  input_container: {
+  labelContainer: {
+    padding: 0
+  },
+  label: {
+    color: Style.formLabelColor,
+    fontSize: Style.formLabelSize,
+    lineHeight: Style.formLabelSize
+  },
+  inputContainer: {
     // borderWidth: 1,
     // borderColor: 'yellow'
   },
@@ -151,7 +167,8 @@ const styles = StyleSheet.create({
     padding: 0,
     height: Style.formTextHeight + Style.formTextPaddingVertical * 2,
     lineHeight: Style.formTextHeight,
-    paddingVertical: Style.formTextPaddingVertical
+    paddingVertical: Style.formTextPaddingVertical,
+    fontSize: Style.formTextSize
   },
   picker: {
     padding: 0,

@@ -3,6 +3,7 @@ import {PropTypes} from 'prop-types'
 import {
   SectionList, StyleSheet, View, FlatList, Text, TouchableWithoutFeedback, RefreshControl
 } from 'react-native'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Style from './Style'
 
 export default class StickyPage extends React.Component {
@@ -11,7 +12,8 @@ export default class StickyPage extends React.Component {
       text: PropTypes.string.isRequired,
       key: PropTypes.string.isRequired,
       screen: PropTypes.func.isRequired,
-      params: PropTypes.any
+      params: PropTypes.any,
+      add: PropTypes.bool
     })).isRequired,
     tabParams: PropTypes.any,
     initIndex: PropTypes.number,
@@ -109,10 +111,14 @@ export default class StickyPage extends React.Component {
     }
   }
 
-  renderSectionHeader = () => {
-    const {tabs} = this.props
-    const {active} = this.state
-    return (
+  onAdd = () => {
+    if (this.screen.onAdd) {
+      this.screen.onAdd()
+    }
+  }
+
+  renderSectionHeader = (tabs, active, tab) => (
+    <View>
       <FlatList
         style={styles.tabContainer}
         data={tabs}
@@ -121,8 +127,18 @@ export default class StickyPage extends React.Component {
         showsHorizontalScrollIndicator={false}
         renderItem={({item}) => this.renderTabItem(item, item.key === active)}
       />
-    )
-  }
+      {tab.add ? (
+        <View style={styles.tabHeader}>
+          <Text numberOfLines={1} style={styles.tabTitle}>{tab.text}</Text>
+          <TouchableWithoutFeedback onPress={this.onAdd}>
+            <View style={styles.tabIcon}>
+              <MaterialIcons name="add" style={styles.tabIconText} />
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      ) : null}
+    </View>
+  )
 
   renderTabItem = (item, isActive) => {
     const {renderTabItem} = this.props
@@ -143,27 +159,23 @@ export default class StickyPage extends React.Component {
     )
   }
 
-  renderItem = () => {
-    const {tabs, tabParams} = this.props
-    const {active, data} = this.state
-    const tab = tabs.find(it => it.key === active)
-    const Screen = tab.screen
-    return (
-      <View style={styles.screen}>
-        <Screen
-          tab={tab}
-          params={{...tab.params, ...tabParams}}
-          stopRefreshing={this.stopRefreshing}
-          ref={(screen) => { this.screen = screen }}
-          data={data[active]}
-          setData={this.setDataHandler}
-        />
-      </View>
-    )
-  }
+  renderItem = (Screen, tab, tabParams, data) => (
+    <View style={[styles.screen, tab.add ? null : styles.screenTop]}>
+      <Screen
+        tab={tab}
+        params={{...tab.params, ...tabParams}}
+        stopRefreshing={this.stopRefreshing}
+        ref={(screen) => { this.screen = screen }}
+        data={data}
+        setData={this.setDataHandler}
+      />
+    </View>
+  )
 
   render() {
-    const {refreshing} = this.state
+    const {tabs, tabParams} = this.props
+    const {refreshing, active, data} = this.state
+    const tab = tabs.find(it => it.key === active)
     const sections = [{key: 'key', data: ['item']}]
     return (
       <SectionList
@@ -173,10 +185,10 @@ export default class StickyPage extends React.Component {
             {this.props.header()}
           </View>
         )}
-        renderSectionHeader={this.renderSectionHeader}
         stickySectionHeadersEnabled
+        renderSectionHeader={() => this.renderSectionHeader(tabs, active, tab)}
         keyExtractor={(item, index) => `${index}`}
-        renderItem={this.renderItem}
+        renderItem={() => this.renderItem(tab.screen, tab, tabParams, data[active])}
         sections={sections}
         refreshControl={(
           <RefreshControl
@@ -206,11 +218,37 @@ const styles = StyleSheet.create({
   tabContainer: {
     backgroundColor: Style.stickyTabBackgroundColor
   },
+  tabHeader: {
+    ...Style.flexRow,
+    backgroundColor: Style.stickyBackgroundColor,
+    paddingHorizontal: Style.stickyTabTitlePaddingHorizontal,
+    paddingVertical: Style.stickyTabTitlePaddingVertical
+  },
+  tabTitle: {
+    width: 0,
+    flex: 1,
+    fontSize: Style.stickyTabTitleSize,
+    color: Style.stickyTabTitleColor
+  },
+  tabIcon: {
+    backgroundColor: Style.white,
+    height: Style.stickyTabIconBox,
+    width: Style.stickyTabIconBox,
+    borderRadius: Style.stickyTabIconBox / 2,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tabIconText: {
+    fontSize: Style.stickyTabIconSize,
+    color: Style.stickyTabIconColor
+  },
   bgWhite: {
     backgroundColor: Style.white
   },
   stickyTab: {
-    paddingHorizontal: Style.stickyTabPadding
+    paddingHorizontal: Style.stickyTabPadding,
+    borderBottomWidth: Style.px,
+    borderBottomColor: Style.borderColor
   },
   stickyTabText: {
     height: Style.stickyTabHeight,
@@ -220,8 +258,10 @@ const styles = StyleSheet.create({
   indicatorStyle: {
     height: Style.stickyIndicatorHeight
   },
+  screenTop: {
+    paddingTop: Style.stickyBackgroundHeight
+  },
   screen: {
-    paddingTop: Style.stickyBackgroundHeight,
     paddingBottom: Style.stickyBackgroundBottom
   }
 })

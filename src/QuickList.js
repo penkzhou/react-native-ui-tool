@@ -4,8 +4,8 @@ import {
 } from 'react-native'
 import {PropTypes} from 'prop-types'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Style from './Style'
 import QuickActions from './QuickActions'
+import Style from './Style'
 import Empty from './Empty'
 
 export default class QuickList extends React.Component {
@@ -20,17 +20,13 @@ export default class QuickList extends React.Component {
       backgroundColor: PropTypes.string,
       color: PropTypes.string
     })),
-    onDelete: PropTypes.func,
-    onAdd: PropTypes.func,
-    addText: PropTypes.string
+    onDelete: PropTypes.func
   }
 
   static defaultProps = {
     data: null,
     btns: [],
-    onDelete: null,
-    onAdd: null,
-    addText: Style.emptyAddText
+    onDelete: null
   }
 
   close = () => {
@@ -55,7 +51,7 @@ export default class QuickList extends React.Component {
 
   render() {
     const {
-      data, renderItem, onAdd, addText
+      data, renderItem
     } = this.props
     if (data instanceof Array) {
       const btns = this.getBtns()
@@ -74,7 +70,7 @@ export default class QuickList extends React.Component {
           bounceFirstRowOnMount={false}
           disableVirtualization={false}
           keyExtractor={(it, idx) => `${idx}`}
-          ListEmptyComponent={() => (<Empty onAdd={onAdd} addText={addText} />)}
+          ListEmptyComponent={() => (<Empty />)}
         />
       )
     }

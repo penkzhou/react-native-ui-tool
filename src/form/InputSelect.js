@@ -3,9 +3,9 @@ import {
   StyleSheet, View, Picker
 } from 'react-native'
 import PropTypes from 'prop-types'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import Style from '../Style'
 import ShowText from './ShowText'
-import AntDesign from 'react-native-vector-icons/AntDesign'
 import Util from './Util'
 
 export default class InputText extends React.Component {

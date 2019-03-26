@@ -1,5 +1,7 @@
 import React from 'react'
-import {BackHandler, TouchableOpacity, Text, View, StyleSheet} from 'react-native'
+import {
+  BackHandler, TouchableOpacity, Text, StyleSheet
+} from 'react-native'
 import {PropTypes} from 'prop-types'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import SafeAreaViewPlus from './SafeAreaViewPlus'
@@ -66,16 +68,17 @@ export default class TabPage extends React.Component {
   }
 
   renderRightBtn = () => {
-    const {rightButton, rightText, onRightEvent} = this.props
+    const {rightButton, onRightEvent} = this.props
     if (typeof rightButton === 'string') {
       return (
         <TouchableOpacity
           style={{alignItems: 'center'}}
-          onPress={onRightEvent}>
+          onPress={onRightEvent}
+        >
           <Text style={{fontSize: 18, color: '#FFFFFF', marginRight: 10}}>{rightButton}</Text>
         </TouchableOpacity>
       )
-    } else if (onRightEvent instanceof Function) {
+    } if (onRightEvent instanceof Function) {
       return (
         <TouchableOpacity
           style={styles.rightIcon}
@@ -119,10 +122,5 @@ const styles = StyleSheet.create({
   rightIcon: {
     padding: 8,
     paddingRight: 12
-  },
-  rightText: {
-    fontSize: Style.barBackTextSize,
-    color: Style.barBackTextColor,
-    marginRight: 10
   }
 })

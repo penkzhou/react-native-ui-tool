@@ -22,7 +22,8 @@ export default class Form extends React.Component {
     onChange: PropTypes.func,
     header: PropTypes.func,
     bottom: PropTypes.func,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    label: PropTypes.bool
   }
 
   static defaultProps = {
@@ -35,7 +36,8 @@ export default class Form extends React.Component {
     onChange: () => {},
     header: null,
     bottom: null,
-    loading: false
+    loading: false,
+    label: false
   }
 
   constructor(props) {
@@ -97,7 +99,7 @@ export default class Form extends React.Component {
 
   render() {
     const {
-      behavior, keyboardVerticalOffset, style, formStyle, inputs, header, bottom, loading
+      behavior, keyboardVerticalOffset, style, formStyle, inputs, header, bottom, loading, label
     } = this.props
     const Content = behavior === 'none' ? View : KeyboardAvoidingView
     return (
@@ -115,6 +117,7 @@ export default class Form extends React.Component {
               ref={input.name}
               key={input.name}
               input={input}
+              showLabel={label}
               onChange={this.itemChangeEvent}
             />
           ))}

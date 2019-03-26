@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  StyleSheet, View, Text, TextInput, Picker
+  StyleSheet, TextInput
 } from 'react-native'
 import PropTypes from 'prop-types'
 import Style from '../Style'

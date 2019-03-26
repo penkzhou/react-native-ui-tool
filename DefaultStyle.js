@@ -108,9 +108,15 @@ export default class DefaultStyle {
   static barBackTextColor = 'white'
 
   // Form
+  static formLabelColor = DefaultStyle.dark6
+
+  static formLabelSize = 10
+
   static formTextPaddingVertical = 5
 
   static formTextHeight = 20
+
+  static formTextSize = 14
 
   static formWarningHeight = 22
 
@@ -150,6 +156,20 @@ export default class DefaultStyle {
   static stickyIndicatorBackgroundColor = DefaultStyle.mainColor
 
   static stickyIndicatorHeight = 2
+
+  static stickyTabTitleSize = 20
+
+  static stickyTabTitlePaddingHorizontal = DefaultStyle.stickyTabPadding
+
+  static stickyTabTitlePaddingVertical = 12
+
+  static stickyTabTitleColor = DefaultStyle.dark5
+
+  static stickyTabIconColor = DefaultStyle.mainColor
+
+  static stickyTabIconSize = 20
+
+  static stickyTabIconBox = 30
 
   // Card
   static cardPadding = 15
