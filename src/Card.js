@@ -11,6 +11,7 @@ export default class Card extends React.Component {
     title: PropTypes.shape({
       title: PropTypes.string,
       onPress: PropTypes.func,
+      option: PropTypes.func,
       style: ViewPropTypes.style,
       textStyle: ViewPropTypes.style,
       renderRight: ViewPropTypes.func
@@ -40,7 +41,7 @@ export default class Card extends React.Component {
     data: []
   }
 
-  static getRightArrow = () => (
+  getArrow = () => (
     <Ionicons
       name="ios-arrow-forward"
       size={Style.cardArrowSize}
@@ -48,12 +49,33 @@ export default class Card extends React.Component {
     />
   )
 
-  getArrow = () => Card.getRightArrow()
+  getMore = (onPress) => (
+    <TouchableOpacity
+      onPress={onPress}
+    >
+      <Ionicons
+        name="ios-more"
+        size={Style.cardArrowSize}
+        style={{marginRight: 10}}
+      />
+    </TouchableOpacity>
+  )
+
+  getTitleRight = (render, option, onPress) => {
+    if (render) return render()
+    if (option instanceof Function) {
+      return this.getMore(option)
+    }
+    if (onPress instanceof Function) {
+      return this.getArrow()
+    }
+    return null
+  }
 
   getTitle = () => {
     const {title = {}} = this.props
     const {
-      onPress, style, textStyle, renderRight
+      onPress, option, style, textStyle, renderRight
     } = title
     const text = title.title
     if (!text) return null
@@ -61,8 +83,7 @@ export default class Card extends React.Component {
     return (
       <Title style={[styles.title, style]} onPress={onPress}>
         <Text numberOfLines={1} style={[styles.titleText, textStyle]}>{text}</Text>
-        {renderRight && renderRight()}
-        {onPress && !renderRight ? this.getArrow() : null}
+        {this.getTitleRight(renderRight, option, onPress)}
       </Title>
     )
   }

@@ -17,7 +17,8 @@ export default class TabPage extends React.Component {
     onRightEvent: PropTypes.func,
     children: PropTypes.element,
     tabColor: PropTypes.string,
-    barStyle: PropTypes.oneOf(['light-content', 'default'])
+    barStyle: PropTypes.oneOf(['light-content', 'default']),
+    backHandler: PropTypes.bool
   }
 
   static defaultProps = {
@@ -27,15 +28,20 @@ export default class TabPage extends React.Component {
     onRightEvent: null,
     children: null,
     tabColor: Style.mainColor,
-    barStyle: Style.barStyle
+    barStyle: Style.barStyle,
+    backHandler: false
   }
 
   componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackEvent)
+    if (this.props.backHandler) {
+      BackHandler.addEventListener('hardwareBackPress', this.onBackEvent)
+    }
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackEvent)
+    if (this.props.backHandler) {
+      BackHandler.removeEventListener('hardwareBackPress', this.onBackEvent)
+    }
   }
 
   onBackEvent = () => {

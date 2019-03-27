@@ -12,6 +12,7 @@ export default class QuickList extends React.Component {
   static propTypes = {
     data: PropTypes.any,
     renderItem: PropTypes.func.isRequired,
+    header: PropTypes.func,
     btns: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string,
       icon: PropTypes.any,
@@ -26,7 +27,8 @@ export default class QuickList extends React.Component {
   static defaultProps = {
     data: null,
     btns: [],
-    onDelete: null
+    onDelete: null,
+    header: null
   }
 
   close = () => {
@@ -51,7 +53,7 @@ export default class QuickList extends React.Component {
 
   render() {
     const {
-      data, renderItem
+      data, renderItem, header
     } = this.props
     if (data instanceof Array) {
       const btns = this.getBtns()
@@ -71,6 +73,7 @@ export default class QuickList extends React.Component {
           disableVirtualization={false}
           keyExtractor={(it, idx) => `${idx}`}
           ListEmptyComponent={() => (<Empty />)}
+          ListHeaderComponent={() => (header && header())}
         />
       )
     }

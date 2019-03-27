@@ -7,6 +7,7 @@ import Style from '../Style'
 import Validate from './Validate'
 import InputText from './InputText'
 import InputSelect from './InputSelect'
+import InputFile from './InputFile'
 
 export default class FormItem extends React.Component {
   static propTypes = {
@@ -106,6 +107,8 @@ export default class FormItem extends React.Component {
     let Target = InputText
     if (input.type === 'select') {
       Target = InputSelect
+    } else if (input.type === 'file') {
+      Target = InputFile
     }
     return (
       <Target

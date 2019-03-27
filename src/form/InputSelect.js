@@ -70,7 +70,7 @@ export default class InputText extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: Style.formTextHeight + Style.formTextPaddingVertical * 2,
     position: 'relative'
   },
   input: {
