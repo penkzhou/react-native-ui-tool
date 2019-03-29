@@ -107,6 +107,10 @@ export default class DefaultStyle {
 
   static barBackTextColor = 'white'
 
+  // TabNavigator
+
+  static tabNavWidth = 120
+
   // Form
   static formLabelColor = DefaultStyle.dark6
 

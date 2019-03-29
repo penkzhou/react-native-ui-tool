@@ -14,12 +14,14 @@ export default class TabNavigator extends React.Component {
     })).isRequired,
     // 传递给TabPage的额外参数
     extraProps: PropTypes.object,
-    tabBarOptions: PropTypes.object
+    tabBarOptions: PropTypes.object,
+    tabWidth: PropTypes.number
   }
 
   static defaultProps = {
     extraProps: {},
-    tabBarOptions: {}
+    tabBarOptions: {},
+    tabWidth: Style.tabNavWidth
   }
 
   componentDidMount() {
@@ -43,11 +45,11 @@ export default class TabNavigator extends React.Component {
 
   // 获取tabs导航
   getTabNavigator = () => {
-    const {tabBarOptions} = this.props
+    const {tabBarOptions, tabWidth} = this.props
     return createAppContainer(createMaterialTopTabNavigator(
       this.getTabs(), {
         tabBarOptions: {
-          tabStyle: styles.tabBarStyle,
+          tabStyle: [styles.tabBarStyle, {width: tabWidth}],
           upperCaseLabel: false,
           scrollEnabled: true,
           style: styles.tabStyle,

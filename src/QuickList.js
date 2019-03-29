@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  SwipeableFlatList
+  SwipeableFlatList, View
 } from 'react-native'
 import {PropTypes} from 'prop-types'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import QuickActions from './QuickActions'
-import Style from './Style'
 import Empty from './Empty'
+import Style from './Style'
 
 export default class QuickList extends React.Component {
   static propTypes = {
@@ -21,14 +21,16 @@ export default class QuickList extends React.Component {
       backgroundColor: PropTypes.string,
       color: PropTypes.string
     })),
-    onDelete: PropTypes.func
+    onDelete: PropTypes.func,
+    renderDetail: PropTypes.func
   }
 
   static defaultProps = {
     data: null,
     btns: [],
     onDelete: null,
-    header: null
+    header: null,
+    renderDetail: () => (<View />)
   }
 
   close = () => {
@@ -51,7 +53,15 @@ export default class QuickList extends React.Component {
     return data
   }
 
+  renderDetail = (item) => {
+    if (item._show) {
+      return this.props.renderDetail(item)
+    }
+    return null
+  }
+
   render() {
+    this.i = -1
     const {
       data, renderItem, header
     } = this.props
@@ -68,6 +78,8 @@ export default class QuickList extends React.Component {
               data={btns}
             />
           )}
+          ItemSeparatorComponent={({leadingItem}) => this.renderDetail(leadingItem)}
+          ListFooterComponent={() => this.renderDetail(data[data.length - 1])}
           maxSwipeDistance={Style.listQuickWidth * btns.length}
           bounceFirstRowOnMount={false}
           disableVirtualization={false}

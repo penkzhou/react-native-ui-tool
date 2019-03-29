@@ -1,5 +1,5 @@
 import React from 'react'
-import {Modal} from 'react-native'
+import {Modal, ScrollView} from 'react-native'
 import {PropTypes} from 'prop-types'
 import TabPage from './TabPage'
 
@@ -61,7 +61,9 @@ export default class SysAccountModify extends React.Component {
           onRightEvent={onRightEvent}
           backHandler={false}
         >
-          {children}
+          <ScrollView style={{flex: 1}}>
+            {children}
+          </ScrollView>
         </TabPage>
       </Modal>
     )

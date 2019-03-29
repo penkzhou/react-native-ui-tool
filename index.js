@@ -17,6 +17,8 @@ import Card from './src/Card'
 import QuickActions from './src/QuickActions'
 import QuickList from './src/QuickList'
 import Empty from './src/Empty'
+import ModalTabPage from './src/ModalTabPage'
+import SlideDownView from './src/SlideDownView'
 
 export {
   Style,
@@ -37,5 +39,7 @@ export {
   Card,
   QuickActions,
   QuickList,
-  Empty
+  Empty,
+  ModalTabPage,
+  SlideDownView
 }
