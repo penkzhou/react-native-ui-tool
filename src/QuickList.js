@@ -4,33 +4,40 @@ import {
 } from 'react-native'
 import {PropTypes} from 'prop-types'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import ItemLine from './ItemLine'
+import SlideAnimation from './SlideAnimation'
 import QuickActions from './QuickActions'
+import VerticalView from './VerticalView'
 import Empty from './Empty'
 import Style from './Style'
 
 export default class QuickList extends React.Component {
   static propTypes = {
     data: PropTypes.any,
-    renderItem: PropTypes.func.isRequired,
     header: PropTypes.func,
-    btns: PropTypes.arrayOf(PropTypes.shape({
-      text: PropTypes.string,
-      icon: PropTypes.any,
-      iconName: PropTypes.string,
-      onPress: PropTypes.func.isRequired,
-      backgroundColor: PropTypes.string,
-      color: PropTypes.string
-    })),
+    itemLineProps: PropTypes.func.isRequired,
+    renderDetail: PropTypes.func,
+    getDetailData: PropTypes.func,
     onDelete: PropTypes.func,
-    renderDetail: PropTypes.func
+    actions: PropTypes.array,
+    idKey: PropTypes.string
   }
 
   static defaultProps = {
     data: null,
-    btns: [],
-    onDelete: null,
     header: null,
-    renderDetail: () => (<View />)
+    renderDetail: null,
+    getDetailData: null,
+    onDelete: null,
+    actions: [],
+    idKey: null
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      index: -1
+    }
   }
 
   close = () => {
@@ -38,9 +45,17 @@ export default class QuickList extends React.Component {
     this.list._onClose()
   }
 
+  // 切换展开
+  toggleDetail = (idx) => {
+    const index = this.state.index === idx ? -1 : idx
+    this.setState({index})
+    this.close()
+  }
+
+  // 操作按钮
   getBtns = () => {
-    const {btns, onDelete} = this.props
-    const data = [].concat(btns)
+    const {actions, onDelete} = this.props
+    const data = [].concat(actions)
     if (onDelete instanceof Function) {
       data.push({
         icon: MaterialIcons,
@@ -53,37 +68,69 @@ export default class QuickList extends React.Component {
     return data
   }
 
+  // 渲染行
+  renderItem = ({item, index}) => {
+    const {data, itemLineProps} = this.props
+    if (!item.isSkipQuickAction) {
+      return (
+        <ItemLine
+          last={data.length * 2 - index - 1 < 1}
+          onPress={() => { this.toggleDetail(index + 1) }}
+          {...itemLineProps(item)}
+        />
+      )
+    }
+    if (index === this.state.index) {
+      return this.renderDetail(item)
+    }
+    return null
+  }
+
+  // 渲染详情
   renderDetail = (item) => {
-    if (item._show) {
-      return this.props.renderDetail(item)
+    const {getDetailData, renderDetail} = this.props
+    if (renderDetail) {
+      return renderDetail(item)
+    }
+    if (getDetailData) {
+      return (
+        <SlideAnimation padding={10}>
+          <View style={{backgroundColor: 'white'}}>
+            <VerticalView data={getDetailData(item)} />
+          </View>
+        </SlideAnimation>
+      )
+    }
+    return null
+  }
+
+  // 渲染按钮
+  renderQuickActions = (btns, item) => {
+    if (btns.length && !item.isSkipQuickAction) {
+      return (
+        <QuickActions
+          target={item}
+          data={btns}
+        />
+      )
     }
     return null
   }
 
   render() {
-    this.i = -1
-    const {
-      data, renderItem, header
-    } = this.props
+    const {data, idKey, header} = this.props
     if (data instanceof Array) {
       const btns = this.getBtns()
       return (
         <SwipeableFlatList
           ref={(ref) => { this.list = ref }}
           data={data}
-          renderItem={({item, index}) => renderItem(item, index, !(data.length - index - 1))}
-          renderQuickActions={(target) => (
-            <QuickActions
-              target={target}
-              data={btns}
-            />
-          )}
-          ItemSeparatorComponent={({leadingItem}) => this.renderDetail(leadingItem)}
-          ListFooterComponent={() => this.renderDetail(data[data.length - 1])}
+          renderItem={this.renderItem}
+          renderQuickActions={({item}) => this.renderQuickActions(btns, item)}
           maxSwipeDistance={Style.listQuickWidth * btns.length}
           bounceFirstRowOnMount={false}
           disableVirtualization={false}
-          keyExtractor={(it, idx) => `${idx}`}
+          keyExtractor={(item, idx) => (idKey ? item[idKey] : `${idx}`)}
           ListEmptyComponent={() => (<Empty />)}
           ListHeaderComponent={() => (header && header())}
         />

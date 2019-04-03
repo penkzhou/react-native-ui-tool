@@ -11,14 +11,16 @@ import Line from './src/Line'
 import Loading from './src/Loading'
 import ListPage from './src/ListPage'
 import TabNavigator from './src/TabNavigator'
-import StickyPage from './src/StickyPage'
+import StickyTab from './src/StickyTab'
+import StickyTabPage from './src/StickyTabPage'
 import TabPage from './src/TabPage'
 import Card from './src/Card'
 import QuickActions from './src/QuickActions'
 import QuickList from './src/QuickList'
 import Empty from './src/Empty'
 import ModalTabPage from './src/ModalTabPage'
-import SlideDownView from './src/SlideDownView'
+import SlideAnimation from './src/SlideAnimation'
+import ItemLine from './src/ItemLine'
 
 export {
   Style,
@@ -34,12 +36,14 @@ export {
   Loading,
   ListPage,
   TabNavigator,
-  StickyPage,
+  StickyTab,
+  StickyTabPage,
   TabPage,
   Card,
   QuickActions,
   QuickList,
   Empty,
   ModalTabPage,
-  SlideDownView
+  SlideAnimation,
+  ItemLine
 }
