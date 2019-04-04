@@ -29,7 +29,7 @@ export default class Form extends React.Component {
   static defaultProps = {
     behavior: 'none',
     keyboardVerticalOffset: 0,
-    formStyle: {},
+    formStyle: null,
     style: {},
     inputs: [],
     original: {},
@@ -104,7 +104,7 @@ export default class Form extends React.Component {
     const Content = behavior === 'none' ? View : KeyboardAvoidingView
     return (
       <Content
-        style={[styles.container, formStyle]}
+        style={formStyle || styles.container}
         behavior={behavior}
         keyboardVerticalOffset={keyboardVerticalOffset}
         enabled
@@ -130,5 +130,7 @@ export default class Form extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    padding: Style.formPadding
   }
 })

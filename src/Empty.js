@@ -3,7 +3,7 @@ import {
   StyleSheet, Text, View, Image
 } from 'react-native'
 import {PropTypes} from 'prop-types'
-import {Button} from 'react-native-ui-tool'
+import Button from './Button'
 import Style from './Style'
 
 export default class Empty extends React.Component {

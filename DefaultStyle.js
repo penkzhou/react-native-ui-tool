@@ -112,6 +112,8 @@ export default class DefaultStyle {
   static tabNavWidth = 120
 
   // Form
+  static formPadding = 20
+
   static formLabelColor = DefaultStyle.dark6
 
   static formLabelSize = 10

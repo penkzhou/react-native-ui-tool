@@ -19,10 +19,30 @@ export default class InputText extends React.Component {
     value: null
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      option: []
+    }
+  }
+
+  componentWillMount = () => {
+    const {option} = this.props.input
+    if (option instanceof Function) {
+      const val = option()
+      if (val instanceof Array) {
+        this.setState({option: val})
+      } else if (val instanceof Promise) {
+        val.then(data => this.setState({option: data}))
+      }
+    }
+  }
+
   getOptions = () => {
     const {input} = this.props
+    const option = input.option instanceof Array ? input.option : this.state.option
     const placeholder = Util.getPlaceholder('请选择', input, '（必选）')
-    const items = input.option.map((opt) => ({text: opt.Text, value: opt.Value, color: Style.formTextColor}))
+    const items = option.map((opt) => ({text: opt.Text, value: opt.Value, color: Style.formTextColor}))
     return [{text: placeholder, value: null, color: Style.formPlaceholderColor}].concat(items)
   }
 

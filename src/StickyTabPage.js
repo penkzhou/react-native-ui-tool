@@ -102,6 +102,7 @@ export default class StickyTabPage extends React.Component {
         />
         <View style={[styles.screen, current.add ? null : styles.screenTop]}>
           <Screen
+            key={current.text}
             tab={current}
             params={{...current.params, ...tabParams}}
             stopRefreshing={this.stopRefreshing}

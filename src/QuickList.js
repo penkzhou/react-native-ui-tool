@@ -70,11 +70,10 @@ export default class QuickList extends React.Component {
 
   // 渲染行
   renderItem = ({item, index}) => {
-    const {data, itemLineProps} = this.props
+    const {itemLineProps} = this.props
     if (!item.isSkipQuickAction) {
       return (
         <ItemLine
-          last={data.length * 2 - index - 1 < 1}
           onPress={() => { this.toggleDetail(index + 1) }}
           {...itemLineProps(item)}
         />

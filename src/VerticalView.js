@@ -64,7 +64,8 @@ export default class VerticalView extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...Style.flexRow
+    ...Style.flexRow,
+    alignItems: 'flex-start'
   },
   vertical: {
     flex: 1
