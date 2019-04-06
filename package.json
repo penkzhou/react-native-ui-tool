@@ -1,6 +1,6 @@
 {
   "name": "react-native-ui-tool",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A package for react-native",
   "main": "index.js",
   "scripts": {

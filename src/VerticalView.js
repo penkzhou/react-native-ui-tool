@@ -9,6 +9,7 @@ const Process = global.UiToolViewProcess || class {}
 
 export default class VerticalView extends React.Component {
   static propTypes = {
+    style: PropTypes.any,
     data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string,
       text: PropTypes.string,
@@ -22,6 +23,7 @@ export default class VerticalView extends React.Component {
   }
 
   static defaultProps = {
+    style: {},
     data: [],
     lineHeight: 25,
     paddingVertical: 10,
@@ -49,9 +51,9 @@ export default class VerticalView extends React.Component {
   }
 
   render() {
-    const {data, paddingVertical, paddingHorizontal} = this.props
+    const {style, data, paddingVertical, paddingHorizontal} = this.props
     return (
-      <View style={[styles.container, {paddingVertical}]}>
+      <View style={[styles.container, style, {paddingVertical}]}>
         {data.map((item, index) => (
           <View key={`l_${index}`} style={[styles.vertical, {paddingHorizontal}]}>
             {item.map(this.getData)}

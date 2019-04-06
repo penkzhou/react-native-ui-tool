@@ -259,9 +259,9 @@ export default class DefaultStyle {
   static shadow = {
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'black',
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 8
   }
 
   // 横向居中

@@ -4,16 +4,18 @@ import {PropTypes} from 'prop-types'
 import TabPage from './TabPage'
 import KeyboardScrollView from './KeyboardScrollView'
 
-export default class SysAccountModify extends React.Component {
+export default class ModalTabPage extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.any.isRequired,
     onRightEvent: PropTypes.func.isRequired,
-    onShow: PropTypes.func
+    onShow: PropTypes.func,
+    onHide: PropTypes.func
   }
 
   static defaultProps = {
-    onShow: () => {}
+    onShow: () => {},
+    onHide: () => {}
   }
 
   constructor(props) {
@@ -23,19 +25,14 @@ export default class SysAccountModify extends React.Component {
     }
   }
 
-  onModalShow = () => {
-    if (!this.first) {
-      this.first = true
-      this.props.onShow()
-    }
-  }
-
   show = () => {
     this.toggleModal(true)
+    this.props.onShow()
   }
 
   hide = () => {
     this.toggleModal(false)
+    this.props.onHide()
   }
 
   toggleModal = (visible) => {
@@ -43,17 +40,15 @@ export default class SysAccountModify extends React.Component {
   }
 
   render() {
-    const {visible} = this.state
     const {
       title, onRightEvent, children
     } = this.props
     return (
       <Modal
-        animationType="slide"
         transparent={false}
-        visible={visible}
+        animationType="slide"
         onRequestClose={this.hide}
-        onShow={this.onModalShow}
+        visible={this.state.visible}
       >
         <TabPage
           title={title}
