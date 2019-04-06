@@ -10,9 +10,9 @@ export default class Util {
     return text
   }
 
-  // 获取Placeholder
+  // 在option中查找value
   static findOption(value, options) {
-    return options.find(it => Util.getString(it.value) === Util.getString(value)) || {}
+    return options.find(it => Util.getString(it.Value) === Util.getString(value)) || {}
   }
 
   static getString(val) {
@@ -20,5 +20,17 @@ export default class Util {
       return val.toString()
     }
     return val
+  }
+
+  // 利用Function获取数据
+  static getDataByFunc(func, callback) {
+    if (func instanceof Function) {
+      const val = func()
+      if (val instanceof Promise) {
+        val.then(data => callback(data))
+      } else {
+        callback(val)
+      }
+    }
   }
 }

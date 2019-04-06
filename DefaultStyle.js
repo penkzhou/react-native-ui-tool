@@ -142,6 +142,8 @@ export default class DefaultStyle {
 
   static formPlaceholderColor = '#cdd3e3'
 
+  static formReadonlyColor = DefaultStyle.dark4
+
   // StickyPage
   static stickyBackgroundColor = DefaultStyle.dark7
 

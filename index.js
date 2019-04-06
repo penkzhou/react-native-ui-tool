@@ -21,6 +21,7 @@ import Empty from './src/Empty'
 import ModalTabPage from './src/ModalTabPage'
 import SlideAnimation from './src/SlideAnimation'
 import ItemLine from './src/ItemLine'
+import KeyboardScrollView from './src/KeyboardScrollView'
 
 export {
   Style,
@@ -45,5 +46,6 @@ export {
   Empty,
   ModalTabPage,
   SlideAnimation,
-  ItemLine
+  ItemLine,
+  KeyboardScrollView
 }

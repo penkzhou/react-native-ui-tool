@@ -1,9 +1,10 @@
 import React from 'react'
 import {
-  StyleSheet, View, Picker
+  StyleSheet, View, TouchableWithoutFeedback, Modal
 } from 'react-native'
 import PropTypes from 'prop-types'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import Picker from 'react-native-picker'
 import Style from '../Style'
 import ShowText from './ShowText'
 import Util from './Util'
@@ -22,35 +23,41 @@ export default class InputText extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      option: []
+      option: [],
+      show: false
     }
   }
 
   componentWillMount = () => {
-    const {option} = this.props.input
-    if (option instanceof Function) {
-      const val = option()
-      if (val instanceof Array) {
-        this.setState({option: val})
-      } else if (val instanceof Promise) {
-        val.then(data => this.setState({option: data}))
-      }
+    // 如果option为Function，获取数据
+    Util.getDataByFunc(this.props.input.option, (option) => this.setState({option}))
+  }
+
+  // 获取Placeholder once
+  getPlaceholder = () => {
+    if (!this.placeholder) {
+      const Text = Util.getPlaceholder('请选择', this.props.input, '（必选）')
+      this.placeholder = {Text, Value: null, color: Style.formPlaceholderColor}
     }
+    return this.placeholder
   }
 
+  // 获取Options
   getOptions = () => {
-    const {input} = this.props
-    const option = input.option instanceof Array ? input.option : this.state.option
-    const placeholder = Util.getPlaceholder('请选择', input, '（必选）')
-    const items = option.map((opt) => ({text: opt.Text, value: opt.Value, color: Style.formTextColor}))
-    return [{text: placeholder, value: null, color: Style.formPlaceholderColor}].concat(items)
+    const {option} = this.props.input
+    return option instanceof Array ? option : this.state.option
   }
 
-  renderShowText = (value, options, input) => {
-    const {text, color} = Util.findOption(value, options)
+  // 获取所有Options
+  getFullOptions = () => [this.getPlaceholder()].concat(this.getOptions())
+
+  // 渲染文本
+  renderShowText = () => {
+    const {value, input} = this.props
+    const {Text, color = Style.formTextColor} = Util.findOption(value, this.getFullOptions())
     return (
       <ShowText
-        text={text}
+        text={Text}
         color={color}
         readonly={!!input.readonly}
         icon={input.readonly ? null : () => (<AntDesign name="caretdown" style={styles.icon} />)}
@@ -58,32 +65,69 @@ export default class InputText extends React.Component {
     )
   }
 
-  renderPicker = (value, options, input, onChange) => {
-    if (!input.readonly) {
-      return (
-        <Picker
-          style={styles.picker}
-          onValueChange={(val) => onChange(val, true)}
-          selectedValue={value}
-          ref={(ref) => { this.picker = ref }}
-        >
-          {options.map((item) => (
-            <Picker.Item key={item.value} label={item.text} value={item.value} color={item.color} />
-          ))}
-        </Picker>
-      )
+  // 显示选择器
+  showModal = () => {
+    this.setState({show: true})
+    setTimeout(() => {
+      this.showPicker()
+    }, 20)
+  }
+
+  // 关闭选择器
+  closeModal = () => {
+    this.setState({show: false})
+    if (Picker.isPickerShow) Picker.hide()
+  }
+
+  // 选择器参数
+  getPickerConfig = () => {
+    if (!this.pickerConfig) {
+      this.pickerConfig = {
+        pickerConfirmBtnText: '确认',
+        pickerCancelBtnText: '取消',
+        pickerConfirmBtnColor: [66, 117, 244, 1],
+        pickerCancelBtnColor: [66, 117, 244, 1],
+        pickerTitleColor: [102, 102, 102, 1],
+        pickerTitleText: this.getPlaceholder().Text,
+        onPickerCancel: this.closeModal,
+        onPickerConfirm: (v, [idx]) => {
+          this.props.onChange(this.getOptions()[idx].Value)
+          this.closeModal()
+        }
+      }
     }
-    return null
+    return this.pickerConfig
+  }
+
+  // 渲染选择器
+  showPicker = () => {
+    const options = this.getOptions()
+    const current = Util.findOption(this.props.value, options)
+    Picker.init({
+      ...this.getPickerConfig(),
+      pickerData: options.map((it) => it.Text),
+      selectedValue: [current.Text]
+    })
+    Picker.show()
   }
 
   render() {
-    const {value, input, onChange} = this.props
-    const options = this.getOptions()
     return (
-      <View style={styles.container}>
-        {this.renderShowText(value, options, input)}
-        {this.renderPicker(value, options, input, onChange)}
-      </View>
+      <TouchableWithoutFeedback onPress={this.showModal}>
+        <View style={styles.container}>
+          {this.renderShowText()}
+          <Modal
+            transparent
+            animationType="fade"
+            visible={this.state.show}
+            onRequestClose={this.closeModal}
+          >
+            <TouchableWithoutFeedback onPress={this.closeModal}>
+              <View style={styles.modalStyle} />
+            </TouchableWithoutFeedback>
+          </Modal>
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }
@@ -104,11 +148,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: Style.formPlaceholderColor
   },
-  picker: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    opacity: 0,
-    backgroundColor: 'transparent' // to hide native icon
+  modalStyle: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.2)'
   }
 })

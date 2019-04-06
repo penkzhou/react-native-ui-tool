@@ -1,4 +1,4 @@
-import React from 'react'
+ import React from 'react'
 import {
   StyleSheet, View, TouchableWithoutFeedback
 } from 'react-native'
@@ -70,12 +70,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingHorizontal: 10,
     color: Style.formPlaceholderColor
-  },
-  picker: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    opacity: 0,
-    backgroundColor: 'transparent' // to hide native icon
   }
 })

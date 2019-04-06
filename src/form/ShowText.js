@@ -7,13 +7,14 @@ import Style from '../Style'
 
 export default class ShowText extends React.Component {
   static propTypes = {
-    text: PropTypes.string.isRequired,
+    text: PropTypes.string,
     color: PropTypes.string,
     readonly: PropTypes.bool,
     icon: PropTypes.func
   }
 
   static defaultProps = {
+    text: '',
     color: null,
     readonly: false,
     icon: null

@@ -2,6 +2,7 @@ import React from 'react'
 import {Modal, ScrollView} from 'react-native'
 import {PropTypes} from 'prop-types'
 import TabPage from './TabPage'
+import KeyboardScrollView from './KeyboardScrollView'
 
 export default class SysAccountModify extends React.Component {
   static propTypes = {
@@ -61,9 +62,9 @@ export default class SysAccountModify extends React.Component {
           onRightEvent={onRightEvent}
           backHandler={false}
         >
-          <ScrollView style={{flex: 1}}>
+          <KeyboardScrollView style={{flex: 1}}>
             {children}
-          </ScrollView>
+          </KeyboardScrollView>
         </TabPage>
       </Modal>
     )
