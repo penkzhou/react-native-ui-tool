@@ -24,23 +24,53 @@ export default class TabNavigator extends React.Component {
     tabWidth: Style.tabNavWidth
   }
 
+  constructor(props) {
+    super(props)
+    this.current = 0
+    this.screenList = []
+  }
+
   componentDidMount() {
+  }
+
+  onRefresh = () => {
+    const ref = this.screenList[this.current]
+    if (ref && ref.onRefresh) ref.onRefresh()
+  }
+
+  onRefreshAll = () => {
+    this.screenList.forEach(screen => {
+      if (screen && screen.onRefresh) screen.onRefresh()
+    })
+  }
+
+  toggleScreen = (pre, next) => {
+    this.current = next.index
   }
 
   // 获取tabs页面
   getTabs = () => {
-    const tabs = {}
+    if (this.tabs) return this.tabs
+    if (!this.screenList) this.screenList = []
+    this.tabs = {}
     const {items, extraProps} = this.props
     items.forEach((item, index) => {
       const Screen = item.screen
-      tabs[`tab${index}`] = {
-        screen: props => (<Screen {...props} {...extraProps} params={item.params} />),
+      this.tabs[`tab${index}`] = {
+        screen: props => (
+          <Screen
+            ref={(ref) => { this.screenList[index] = ref }}
+            {...props}
+            {...extraProps}
+            params={item.params}
+          />
+        ),
         navigationOptions: {
           title: item.text
         }
       }
     })
-    return tabs
+    return this.tabs
   }
 
   // 获取tabs导航
@@ -66,7 +96,9 @@ export default class TabNavigator extends React.Component {
     const TabWrapperNavigator = this.getTabNavigator()
     return (
       <View style={styles.container}>
-        <TabWrapperNavigator />
+        <TabWrapperNavigator
+          onNavigationStateChange={this.toggleScreen}
+        />
       </View>
     )
   }

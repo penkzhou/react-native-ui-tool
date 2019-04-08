@@ -51,7 +51,9 @@ export default class VerticalView extends React.Component {
   }
 
   render() {
-    const {style, data, paddingVertical, paddingHorizontal} = this.props
+    const {
+      style, data, paddingVertical, paddingHorizontal
+    } = this.props
     return (
       <View style={[styles.container, style, {paddingVertical}]}>
         {data.map((item, index) => (

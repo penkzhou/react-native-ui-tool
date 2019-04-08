@@ -1,4 +1,4 @@
- import React from 'react'
+import React from 'react'
 import {
   StyleSheet, View, TouchableWithoutFeedback
 } from 'react-native'
@@ -36,7 +36,8 @@ export default class InputText extends React.Component {
 
   selectFile = () => {
     ImagePicker.openPicker({}).then(({path}) => {
-      this.props.onChange({
+      const {onChange, input} = this.props
+      onChange(input.name, {
         uri: path,
         type: 'multipart/form-data',
         name: path.substr(path.lastIndexOf('/') + 1)

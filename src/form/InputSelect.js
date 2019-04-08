@@ -13,11 +13,13 @@ export default class InputText extends React.Component {
   static propTypes = {
     input: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.any
+    value: PropTypes.any,
+    style: PropTypes.any
   }
 
   static defaultProps = {
-    value: null
+    value: null,
+    style: null
   }
 
   constructor(props) {
@@ -91,7 +93,8 @@ export default class InputText extends React.Component {
         pickerTitleText: this.getPlaceholder().Text,
         onPickerCancel: this.closeModal,
         onPickerConfirm: (v, [idx]) => {
-          this.props.onChange(this.getOptions()[idx].Value)
+          const {onChange, input} = this.props
+          onChange(input.name, this.getOptions()[idx].Value)
           this.closeModal()
         }
       }
@@ -114,7 +117,7 @@ export default class InputText extends React.Component {
   render() {
     return (
       <TouchableWithoutFeedback onPress={this.showModal}>
-        <View style={styles.container}>
+        <View style={[styles.container, this.props.style]}>
           {this.renderShowText()}
           <Modal
             transparent

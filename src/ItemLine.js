@@ -30,7 +30,9 @@ export default class ItemLine extends React.Component {
     onPress: null
   }
 
-  renderIcon = ({icon, name, size = 24, color = Style.listIconColor}) => {
+  renderIcon = ({
+    icon, name, size = 24, color = Style.listIconColor
+  }) => {
     const IconEl = icon
     return <IconEl name={name} style={[styles.icon, {fontSize: size, color}]} />
   }

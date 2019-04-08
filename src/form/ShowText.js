@@ -26,7 +26,7 @@ export default class ShowText extends React.Component {
     } = this.props
     const iText = readonly ? `${text || ''}（只读）` : text
     return (
-      <View style={[styles.container]}>
+      <View style={styles.container}>
         <Text style={[styles.showText, {color: readonly ? Style.formReadonlyColor : color}]}>{iText}</Text>
         {icon && icon()}
       </View>

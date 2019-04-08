@@ -1,5 +1,5 @@
 import React from 'react'
-import {Modal, ScrollView} from 'react-native'
+import {Modal} from 'react-native'
 import {PropTypes} from 'prop-types'
 import TabPage from './TabPage'
 import KeyboardScrollView from './KeyboardScrollView'
@@ -55,7 +55,6 @@ export default class ModalTabPage extends React.Component {
           onBackEvent={this.hide}
           rightButton="保存"
           onRightEvent={onRightEvent}
-          backHandler={false}
         >
           <KeyboardScrollView style={{flex: 1}}>
             {children}

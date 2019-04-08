@@ -24,7 +24,7 @@ export default class FormItem extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: this.props.input.value || null,
+      value: {},
       focus: false,
       warning: false,
       message: ''
@@ -36,34 +36,6 @@ export default class FormItem extends React.Component {
     onChange(input.name, this.state.value)
   }
 
-  // 表单验证 -> callback
-  check = (callback, errorHandler) => {
-    this.validate().then(({formData}) => {
-      if (callback instanceof Function) callback({formData})
-    }).catch((fields) => {
-      if (errorHandler instanceof Function) errorHandler(fields)
-    })
-  }
-
-  // 表单验证 -> Promise
-  validate = () => {
-    const {input} = this.props
-    const {value} = this.state
-    const formData = {[input.name]: value}
-    return new Promise((resolve, reject) => {
-      Validate.validate([input], formData).then(() => {
-        resolve({formData})
-      }).catch((fields) => {
-        const item = fields[input.name]
-        if (item && item[0]) {
-          const {message} = item[0]
-          this.warning({message})
-        }
-        reject(fields)
-      })
-    })
-  }
-
   // 警告
   warning = ({message}) => {
     this.setState({
@@ -73,13 +45,14 @@ export default class FormItem extends React.Component {
   }
 
   // 赋值回调
-  changeEvent = (value, blur = false) => {
-    const {input, onChange} = this.props
-    input.value = value
-    this.setState({value, warning: false}, () => {
-      if (blur) this.blurEvent()
+  changeEvent = (name, value, blur = false) => {
+    this.setState({
+      value: {...this.state.value, [name]: value},
+      warning: false
+    }, () => {
+      if (blur) this.blurEvent(name)
     })
-    onChange(input.name, value)
+    this.props.onChange(name, value)
   }
 
   // 焦点回调
@@ -91,11 +64,23 @@ export default class FormItem extends React.Component {
   }
 
   // 失焦回调
-  blurEvent = () => {
+  blurEvent = (name) => {
     this.setState({focus: false})
-    this.check()
+    this.validate(name)
   }
 
+  // 表单验证 -> Promise
+  validate = (name) => {
+    const inputs = this.getItems().filter(ipt => ipt.name === name)
+    const {value} = this.state
+    const validate = new Validate(inputs)
+    validate.validate(value).then(() => {}).catch((fields) => {
+      const item = Object.values(fields)[0]
+      if (item && item[0]) this.warning({message: item[0].message})
+    })
+  }
+
+  // 获取线颜色
   getLineColor = () => {
     const {warning, focus} = this.state
     if (focus) return Style.formBorderColorFocus
@@ -103,7 +88,7 @@ export default class FormItem extends React.Component {
     return Style.formBorderColor
   }
 
-  renderInput = (input, value) => {
+  renderInputs = (input, value, idx) => {
     let Target = InputText
     if (input.type === 'select') {
       Target = InputSelect
@@ -112,11 +97,13 @@ export default class FormItem extends React.Component {
     }
     return (
       <Target
+        key={input.name}
         input={input}
-        value={value}
+        value={value[input.name]}
         onFocus={this.focusEvent}
-        onBlur={this.blurEvent}
+        onBlur={() => this.blurEvent(input.name)}
         onChange={this.changeEvent}
+        style={styles[`input_${idx}`]}
       />
     )
   }
@@ -127,23 +114,31 @@ export default class FormItem extends React.Component {
     </View>
   )
 
+  getItems = () => {
+    const {input} = this.props
+    return input.items || [input]
+  }
+
   render() {
     const {input, showLabel} = this.props
     const {warning, message, value} = this.state
     const borderTopColor = this.getLineColor()
+    const items = this.getItems()
     return (
       <View style={styles.container}>
-        {React.isValidElement(input.prefix) ? input.prefix : null}
+        {input.prefix && input.prefix()}
         <View style={styles.inputContainer}>
           {showLabel && input.label && this.renderLabel(input.label)}
-          {this.renderInput(input, value)}
+          <View style={styles.inputGroup}>
+            {items.map((ipt, idx) => this.renderInputs(ipt, value, idx))}
+          </View>
           <View style={[styles.warning, {borderTopColor}]}>
             <Text style={styles.warning_text}>
               {warning ? message : ''}
             </Text>
           </View>
         </View>
-        {React.isValidElement(input.suffix) ? input.suffix : null}
+        {input.suffix && input.suffix()}
       </View>
 
     )
@@ -166,12 +161,25 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'yellow'
   },
+  inputGroup: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'space-between'
+  },
   input: {
     padding: 0,
     height: Style.formTextHeight + Style.formTextPaddingVertical * 2,
     lineHeight: Style.formTextHeight,
     paddingVertical: Style.formTextPaddingVertical,
     fontSize: Style.formTextSize
+  },
+  input_0: {
+    width: 0,
+    flex: 1
+  },
+  input_1: {
+    width: 150,
+    marginLeft: 10
   },
   picker: {
     padding: 0,

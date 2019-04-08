@@ -3,17 +3,20 @@ import {PropTypes} from 'prop-types'
 import {
   StyleSheet, ActivityIndicator, Text, View, FlatList, RefreshControl
 } from 'react-native'
+import Empty from './Empty'
 import Style from './Style'
 
 export default class ListPage extends React.Component {
   static propTypes = {
     params: PropTypes.object,
+    getParams: PropTypes.func,
     renderItem: PropTypes.func.isRequired,
     getDataFunc: PropTypes.func.isRequired,
     idKey: PropTypes.string
   }
 
   static defaultProps = {
+    getParams: () => {},
     params: {},
     idKey: null
   }
@@ -30,14 +33,14 @@ export default class ListPage extends React.Component {
   }
 
   componentDidMount() {
-    this.refreshEvent()
+    this.onRefresh()
   }
 
   componentWillUnmount() {
   }
 
   // 刷新事件
-  refreshEvent = () => {
+  onRefresh = () => {
     this.setState({
       refreshing: true,
       pageTotal: 0,
@@ -60,8 +63,9 @@ export default class ListPage extends React.Component {
 
   // 获取数据
   getDataList = (pageIndex) => {
-    const {getDataFunc, params} = this.props
-    getDataFunc({pageIndex}, params).then(({dataList, pageTotal}) => {
+    const {getDataFunc, params, getParams} = this.props
+    const extParams = getParams()
+    getDataFunc({pageIndex}, {...params, ...extParams}).then(({dataList, pageTotal}) => {
       const prev = pageIndex <= 1 ? [] : this.state.dataList
       this.setState({
         pageTotal,
@@ -102,27 +106,26 @@ export default class ListPage extends React.Component {
     const {idKey, renderItem} = this.props
     const {dataList, refreshing} = this.state
     return (
-      <View style={styles.container}>
-        <FlatList
-          data={dataList}
-          renderItem={renderItem}
-          keyExtractor={data => data[idKey]}
-          refreshControl={(
-            <RefreshControl
-              title={Style.loadingTitle}
-              titleColor={Style.loadingColor}
-              colors={[Style.loadingColor]}
-              refreshing={refreshing}
-              onRefresh={this.refreshEvent}
-              tintColor={Style.loadingColor}
-            />
-          )}
-          ListFooterComponent={this.genIndicator}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={this.onMomentumScrollBegin}
-        />
-      </View>
+      <FlatList
+        data={dataList}
+        renderItem={renderItem}
+        keyExtractor={data => data[idKey]}
+        refreshControl={(
+          <RefreshControl
+            title={Style.loadingTitle}
+            titleColor={Style.loadingColor}
+            colors={[Style.loadingColor]}
+            refreshing={refreshing}
+            onRefresh={this.onRefresh}
+            tintColor={Style.loadingColor}
+          />
+        )}
+        ListFooterComponent={this.genIndicator}
+        ListEmptyComponent={() => (refreshing ? null : <Empty />)}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={0.5}
+        onMomentumScrollBegin={this.onMomentumScrollBegin}
+      />
     )
   }
 }

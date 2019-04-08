@@ -13,26 +13,28 @@ export default class InputText extends React.Component {
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
-    value: PropTypes.any
+    value: PropTypes.any,
+    style: PropTypes.any
   }
 
   static defaultProps = {
-    value: null
+    value: null,
+    style: null
   }
 
   render() {
     const {
-      input, value, onChange, onFocus, onBlur
+      input, value, onChange, onFocus, onBlur, style
     } = this.props
     const placeholder = Util.getPlaceholder('请输入', input)
     if (!input.readonly) {
       return (
         <TextInput
-          style={[styles.input, input.style]}
+          style={[styles.input, style, input.style]}
           placeholder={placeholder}
           placeholderTextColor={Style.formPlaceholderColor}
           value={value}
-          onChangeText={onChange}
+          onChangeText={(v) => onChange(input.name, v)}
           onFocus={onFocus}
           onBlur={onBlur}
         />

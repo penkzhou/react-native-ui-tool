@@ -33,4 +33,18 @@ export default class Util {
       }
     }
   }
+
+  // 获取Ref
+  static getRefByInput(input) {
+    if (input.items) {
+      return input.items.map(({name}) => name).join(',')
+    }
+    return input.name
+  }
+
+  // 获取Ref
+  static getRefByField(field, inputs) {
+    const input = inputs.find(ipt => (ipt.items ? ipt.items.map(({name}) => name).includes(field) : ipt.name === field))
+    return Util.getRefByInput(input || {})
+  }
 }

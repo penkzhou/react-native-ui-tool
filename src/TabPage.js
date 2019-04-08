@@ -1,9 +1,8 @@
 import React from 'react'
-import {
-  BackHandler, TouchableOpacity, Text, StyleSheet
-} from 'react-native'
+import {TouchableOpacity, Text, StyleSheet} from 'react-native'
 import {PropTypes} from 'prop-types'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import BackStack from 'react-native-back-stack'
 import SafeAreaViewPlus from './SafeAreaViewPlus'
 import NavigationBar from './NavigationBar'
 import Style from './Style'
@@ -34,22 +33,19 @@ export default class TabPage extends React.Component {
 
   componentWillMount() {
     if (this.props.backHandler) {
-      BackHandler.addEventListener('hardwareBackPress', this.onBackEvent)
+      BackStack.bind(this.onBackEvent)
     }
   }
 
   componentWillUnmount() {
     if (this.props.backHandler) {
-      BackHandler.removeEventListener('hardwareBackPress', this.onBackEvent)
+      BackStack.unbind(this.onBackEvent)
     }
   }
 
   onBackEvent = () => {
     const {onBackEvent} = this.props
-    if (onBackEvent instanceof Function) {
-      return onBackEvent()
-    }
-    return false
+    return (onBackEvent instanceof Function) && onBackEvent()
   }
 
   getLeftButton = () => {
