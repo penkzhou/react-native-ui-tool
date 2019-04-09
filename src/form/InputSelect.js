@@ -12,6 +12,8 @@ import Util from './Util'
 export default class InputText extends React.Component {
   static propTypes = {
     input: PropTypes.object.isRequired,
+    onFocus: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.any,
     style: PropTypes.any
@@ -30,7 +32,7 @@ export default class InputText extends React.Component {
     }
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     // 如果option为Function，获取数据
     Util.getDataByFunc(this.props.input.option, (option) => this.setState({option}))
   }
@@ -70,6 +72,7 @@ export default class InputText extends React.Component {
   // 显示选择器
   showModal = () => {
     this.setState({show: true})
+    this.props.onFocus()
     setTimeout(() => {
       this.showPicker()
     }, 20)
@@ -79,6 +82,7 @@ export default class InputText extends React.Component {
   closeModal = () => {
     this.setState({show: false})
     if (Picker.isPickerShow) Picker.hide()
+    this.props.onBlur()
   }
 
   // 选择器参数
@@ -87,6 +91,7 @@ export default class InputText extends React.Component {
       this.pickerConfig = {
         pickerConfirmBtnText: '确认',
         pickerCancelBtnText: '取消',
+        pickerTextEllipsisLen: 20,
         pickerConfirmBtnColor: [66, 117, 244, 1],
         pickerCancelBtnColor: [66, 117, 244, 1],
         pickerTitleColor: [102, 102, 102, 1],
@@ -105,6 +110,9 @@ export default class InputText extends React.Component {
   // 渲染选择器
   showPicker = () => {
     const options = this.getOptions()
+    if (!options.length) {
+      options.push({Text: ' '})
+    }
     const current = Util.findOption(this.props.value, options)
     Picker.init({
       ...this.getPickerConfig(),

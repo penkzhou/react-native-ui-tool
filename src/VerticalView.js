@@ -35,7 +35,9 @@ export default class VerticalView extends React.Component {
     const {numberOfLines, lineHeight} = this.props
     const Box = it.onPress ? TouchableOpacity : View
     const text = it.process && Process[it.process] ? Process[it.process](it.text) : it.text
-    const textStyle = {...styles.text, lineHeight, ...it.textStyle}
+    const textStyle = {
+      ...styles.text, lineHeight, ...it.textStyle, color: it.onPress ? Style.mainColor : null
+    }
     return (
       <Box onPress={() => it.onPress && it.onPress(it)} key={`b_${idx}`}>
         <Text style={textStyle} numberOfLines={numberOfLines}>

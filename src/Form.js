@@ -78,6 +78,13 @@ export default class Form extends React.Component {
     })
   }
 
+  // set 设置参数
+  set = (name, value) => {
+    const ref = Util.getRefByField(name, this.props.inputs)
+    if (this.refs[ref]) this.refs[ref].changeEvent(name, value)
+  }
+
+
   // FormItem 组件回调
   formItemChange = (name, value) => {
     this.setState({formData: {...this.state.formData, [name]: value}})

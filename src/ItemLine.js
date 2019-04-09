@@ -54,8 +54,8 @@ export default class ItemLine extends React.Component {
           <View style={[styles.lineContainer, {borderBottomColor: last ? 'transparent' : Style.borderColor}]}>
             {leftIcon && this.renderIcon(leftIcon)}
             <View style={styles.textContainer}>
-              <Text style={styles.title}>{title}</Text>
-              <Text style={styles.subTitle}>{subTitle}</Text>
+              <Text style={styles.title} numberOfLines={1}>{title}</Text>
+              <Text style={styles.subTitle} numberOfLines={1}>{subTitle}</Text>
             </View>
             {option && this.renderOption()}
           </View>

@@ -32,8 +32,9 @@ export default class FormItem extends React.Component {
   }
 
   componentDidMount = () => {
-    const {onChange, input} = this.props
-    onChange(input.name, this.state.value)
+    this.getItems().forEach(({name, value}) => {
+      this.changeEvent(name, value)
+    })
   }
 
   // 警告

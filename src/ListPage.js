@@ -94,7 +94,8 @@ export default class ListPage extends React.Component {
   // 滚动到底部回调
   // fix 滚动时两次调用onEndReached https://github.com/facebook/react-native/issues/14015
   onEndReached = () => {
-    setTimeout(() => {
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
       if (this.canLoadMore) {
         this.loadMoreEvent()
         this.canLoadMore = false

@@ -213,7 +213,7 @@ export default class DefaultStyle {
 
   static listTitleSize = 15
 
-  static listTitleHeight = 30
+  static listTitleHeight = 28
 
   static listGrayColor = DefaultStyle.dark5
 

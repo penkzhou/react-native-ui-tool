@@ -20,7 +20,8 @@ export default class QuickList extends React.Component {
     getDetailData: PropTypes.func,
     onDelete: PropTypes.func,
     actions: PropTypes.array,
-    idKey: PropTypes.string
+    idKey: PropTypes.string,
+    onLoadMore: PropTypes.func
   }
 
   static defaultProps = {
@@ -30,7 +31,8 @@ export default class QuickList extends React.Component {
     getDetailData: null,
     onDelete: null,
     actions: [],
-    idKey: null
+    idKey: null,
+    onLoadMore: null
   }
 
   constructor(props) {
@@ -116,6 +118,17 @@ export default class QuickList extends React.Component {
     return null
   }
 
+  // 滚动到底部回调
+  onEndReached = () => {
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      if (this.props.onLoadMore) {
+        this.props.onLoadMore()
+      }
+    }, 100)
+  }
+
+
   render() {
     const {data, idKey, header} = this.props
     if (data instanceof Array) {
@@ -132,6 +145,8 @@ export default class QuickList extends React.Component {
           keyExtractor={(item, idx) => (idKey ? item[idKey] : `${idx}`)}
           ListEmptyComponent={() => (<Empty />)}
           ListHeaderComponent={() => (header && header())}
+          onEndReached={this.onEndReached}
+          onEndReachedThreshold={0.5}
         />
       )
     }
