@@ -29,6 +29,7 @@ export default class StickyTabPage extends React.Component {
     super(props)
     this.state = {
       tabs: [...this.props.tabs],
+      fullData: {},
       refreshing: false
     }
   }
@@ -64,16 +65,15 @@ export default class StickyTabPage extends React.Component {
   }
 
   // screen存储数据
-  setDataHandler = (data) => {
-    const {tabs} = this.state
-    const current = tabs.find(it => it.active) || {}
-    current.data = data
-    this.setState({tabs})
+  setDataHandler = (data, key) => {
+    const {fullData} = this.state
+    fullData[key] = data
+    this.setState({fullData})
   }
 
   render() {
     const {header, tabParams} = this.props
-    const {tabs, refreshing} = this.state
+    const {tabs, refreshing, fullData} = this.state
     const current = tabs.find(it => it.active)
     const Screen = current.screen
     return (
@@ -107,8 +107,8 @@ export default class StickyTabPage extends React.Component {
             params={{...current.params, ...tabParams}}
             stopRefreshing={this.stopRefreshing}
             ref={(screen) => { this.screen = screen }}
-            data={current.data}
-            setData={this.setDataHandler}
+            data={fullData[current.text]}
+            setData={(data) => this.setDataHandler(data, current.text)}
           />
         </View>
       </ScrollView>

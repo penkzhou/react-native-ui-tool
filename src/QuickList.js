@@ -16,6 +16,7 @@ export default class QuickList extends React.Component {
     data: PropTypes.any,
     header: PropTypes.func,
     itemLineProps: PropTypes.func.isRequired,
+    renderItem: PropTypes.func,
     renderDetail: PropTypes.func,
     getDetailData: PropTypes.func,
     onDelete: PropTypes.func,
@@ -27,6 +28,7 @@ export default class QuickList extends React.Component {
   static defaultProps = {
     data: null,
     header: null,
+    renderItem: null,
     renderDetail: null,
     getDetailData: null,
     onDelete: null,
@@ -72,8 +74,9 @@ export default class QuickList extends React.Component {
 
   // 渲染行
   renderItem = ({item, index}) => {
-    const {itemLineProps} = this.props
+    const {itemLineProps, renderItem} = this.props
     if (!item.isSkipQuickAction) {
+      if (renderItem) return renderItem(item)
       return (
         <ItemLine
           onPress={() => { this.toggleDetail(index + 1) }}
@@ -90,19 +93,15 @@ export default class QuickList extends React.Component {
   // 渲染详情
   renderDetail = (item) => {
     const {getDetailData, renderDetail} = this.props
-    if (renderDetail) {
-      return renderDetail(item)
-    }
-    if (getDetailData) {
-      return (
-        <SlideAnimation padding={10}>
-          <View style={{backgroundColor: 'white'}}>
+    return (
+      <SlideAnimation>
+        {renderDetail ? renderDetail(item) : (
+          <View style={{backgroundColor: 'white', margin: 10}}>
             <VerticalView data={getDetailData(item)} />
           </View>
-        </SlideAnimation>
-      )
-    }
-    return null
+        )}
+      </SlideAnimation>
+    )
   }
 
   // 渲染按钮
