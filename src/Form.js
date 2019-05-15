@@ -43,8 +43,9 @@ export default class Form extends React.Component {
 
   constructor(props) {
     super(props)
+    this.formData = {}
     this.state = {
-      formData: {}
+      formData: this.formData
     }
   }
 
@@ -87,7 +88,9 @@ export default class Form extends React.Component {
 
   // FormItem 组件回调
   formItemChange = (name, value) => {
-    this.setState({formData: {...this.state.formData, [name]: value}})
+    this.formData[name] = value
+    console.log('formItemChange', this.formData)
+    this.setState({formData: this.formData})
     this.props.onChange(name, value)
   }
 

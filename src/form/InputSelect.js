@@ -71,11 +71,13 @@ export default class InputText extends React.Component {
 
   // 显示选择器
   showModal = () => {
-    this.setState({show: true})
-    this.props.onFocus()
-    setTimeout(() => {
-      this.showPicker()
-    }, 20)
+    if (!this.props.input.readonly) {
+      this.setState({show: true})
+      this.props.onFocus()
+      setTimeout(() => {
+        this.showPicker()
+      }, 20)
+    }
   }
 
   // 关闭选择器
